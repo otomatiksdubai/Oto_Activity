@@ -71,7 +71,7 @@ export default function Landing() {
   ];
 
   const testimonials = [
-    { name: 'Sara Al Mansouri', role: 'Parent of Ahmed, 9', text: 'My son came home every day excited. The trainers are patient and incredibly skilled. Best investment we made!' },
+    { name: 'Sara Al Mansouri', role: 'Parent of Antony, 9', text: 'My son came home every day excited. The trainers are patient and incredibly skilled. Best investment we made!' },
     { name: 'James Fernandez', role: 'Parent of Lily, 11', text: 'Lily built her first robot in month 2. The progress is incredible and the small batch size really makes a difference.' },
     { name: 'Fatima Al Rashidi', role: 'Parent of Omar, 7', text: 'I love how they mix screen-free robotics with coding. Omar has become so focused and creative since joining.' },
     { name: 'Raj Patel', role: 'Parent of Arya, 13', text: 'Arya\'s Python skills jumped significantly. The Arduino AI course is genuinely advanced. Highly recommended!' },
