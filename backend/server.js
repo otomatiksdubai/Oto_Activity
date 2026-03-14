@@ -9,9 +9,19 @@ require('dotenv').config();
 
 const app = express();
 
+// Trust proxy for Render (crucial for sessions/cookies over HTTPS)
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Allow same-origin requests (no origin header) or matching FRONTEND_URL
+    if (!origin || origin === process.env.FRONTEND_URL || origin.includes('onrender.com') || origin.includes('localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -55,6 +65,11 @@ const attendanceRoutes = require('./routes/attendance');
 const feesRoutes = require('./routes/fees');
 
 // Use Routes
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/staff', staffRoutes);
