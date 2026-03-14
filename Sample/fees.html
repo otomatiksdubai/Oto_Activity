@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Fees</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body onload="renderFees()">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="assets/Otomatiks logo.png" alt="Otomatiks Logo" class="logo-img">
+        <div class="small" id="who" style="margin-left:auto"></div>
+      </div>
+      <div class="actions">
+
+        <button class="btn ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="badge">MENU</div>
+        <div class="nav" id="nav" style="margin-top:10px"></div>
+      </aside>
+
+      <main class="card">
+        <h1>Fees / Invoices</h1>
+        <!-- <p class="muted">Admin/Staff can create invoices. Parent sees invoices for their children.</p> -->
+
+
+        <div id="feeForm">
+          <h2>Create Invoice</h2>
+          <div class="row3">
+            <div class="field"><label>Invoice ID</label><input id="fId" placeholder="(Auto)" disabled
+                style="background:#f0f0f0"></div>
+            <div class="field"><label>Student Name</label><input id="fStudent" placeholder="Student Name"></div>
+            <div class="field"><label>Status</label>
+              <select id="fStatus">
+                <option value="paid">Paid</option>
+                <option value="partial">Partial</option>
+                <option value="unpaid">Unpaid</option>
+              </select>
+            </div>
+          </div>
+          <div class="row3">
+            <div class="field"><label>Course</label>
+              <select id="fCourse">
+                <option value="Robotics Level 1">Robotics Level 1</option>
+                <option value="Level 1 and 2 Combined">Level 1 and 2 Combined</option>
+                <option value="Level Up">Level Up</option>
+                <option value="3D Printing">3D Printing</option>
+              </select>
+            </div>
+            <div class="field"><label>Price (AED)</label><input id="fAmount" type="number" placeholder="Original Price">
+            </div>
+            <div class="field"><label>Discount (AED)</label><input id="fDiscount" type="number"
+                placeholder="Discounted Amount"></div>
+          </div>
+          <div class="row">
+            <!-- <div class="field"><label>Currency</label><input disabled value="AED"></div> -->
+          </div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn ok" onclick="addInvoice()">Create</button>
+            <button class="btn ghost" onclick="exportFees()" style="margin-left:8px">Export to Excel</button>
+          </div>
+          <div id="fMsg" style="margin-top:10px"></div>
+          <hr>
+        </div>
+
+        <div class="scroll-table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Student Name</th>
+                <th>Course</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="feesTable"></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+
+</html>

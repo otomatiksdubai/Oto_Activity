@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Students</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body onload="renderStudents()">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="assets/Otomatiks logo.png" alt="Otomatiks Logo" class="logo-img">
+        <div class="small" id="who" style="margin-left:auto"></div>
+      </div>
+      <div class="actions">
+
+        <button class="btn ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="badge">MENU</div>
+        <div class="nav" id="nav" style="margin-top:10px"></div>
+      </aside>
+
+      <main class="card">
+        <h1>Students</h1>
+        <p class="muted">Admin/Staff can add & delete. Parent sees only their children.</p>
+
+        <div id="studentForm">
+          <h2>Add Student</h2>
+          <div class="row">
+            <div class="field"><label>Name</label><input id="sname" placeholder="Student name" style="width:100%"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>Grade</label><input id="sgrade" placeholder="G4"></div>
+            <div class="field"><label>School Name</label><input id="sschool" placeholder="School name"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>Parent Phone Number</label><input id="sphone" placeholder="0501234567"></div>
+            <div class="field"><label>Course Enrolled</label><input id="scourse"
+                placeholder="e.g., Robotics Basics, Arduino Level 1"></div>
+          </div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn ok" onclick="addStudent()">Add</button>
+          </div>
+          <div id="sMsg" style="margin-top:10px"></div>
+          <hr>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="margin:0;">Students List</h2>
+          <button id="lockBtn" class="btn ghost" onclick="toggleDeleteLock()">🔒 Locked (Click to Unlock
+            Delete)</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Grade</th>
+              <th>School</th>
+              <th>Course Enrolled</th>
+              <th>Parent Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTable"></tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+
+  <!-- Student Details Modal -->
+  <div id="studentModal" class="modal">
+    <div class="modal-content">
+      <h2>Student Details</h2>
+      <div id="studentDetailsView">
+        <div class="field">
+          <label>Name</label>
+          <input id="viewName" readonly style="background: #f8f9fa;">
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Grade</label>
+            <input id="viewGrade" readonly style="background: #f8f9fa;">
+          </div>
+          <div class="field">
+            <label>School Name</label>
+            <input id="viewSchool" readonly style="background: #f8f9fa;">
+          </div>
+        </div>
+        <div class="field">
+          <label>Course Enrolled</label>
+          <input id="viewCourse" readonly style="background: #f8f9fa;"
+            placeholder="e.g., Robotics Basics, Arduino Level 1">
+        </div>
+        <div class="field">
+          <label>Parent Phone Number</label>
+          <input id="viewPhone" readonly style="background: #f8f9fa;">
+        </div>
+        <div class="field">
+          <label>Parent Login Username</label>
+          <input id="viewUsername" readonly style="background: #f8f9fa;">
+        </div>
+        <div class="field">
+          <label>Parent Login Password</label>
+          <input id="viewPassword" readonly style="background: #f8f9fa;">
+        </div>
+      </div>
+      <div class="actions" style="margin-top:20px">
+        <button class="btn ghost" onclick="closeStudentModal()">Close</button>
+        <button id="editBtn" class="btn ok" onclick="enableEdit()" style="display:none">Edit</button>
+        <button id="saveBtn" class="btn ok" onclick="saveStudent()" style="display:none">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+
+</html>
