@@ -52,7 +52,12 @@ function App() {
 
   // If on landing page, don't show the internal portal layout
   if (location.pathname === '/' && !user) {
-    return <Landing />;
+    return (
+      <>
+        <div className="test-banner">test run UI</div>
+        <Landing />
+      </>
+    );
   }
 
   // If user is logged in and tries to access landing, maybe redirect to dashboard?
@@ -64,6 +69,7 @@ function App() {
 
   return (
     <div className="container">
+      <div className="test-banner">test run UI</div>
       {user && (
         <div className="topbar">
           <div className="brand">
