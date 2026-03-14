@@ -6,3 +6,6 @@ dist/
 build/
 .idea/
 .vscode/local history
+backend\.env
+.env
+node_modules
