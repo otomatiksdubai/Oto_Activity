@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body onload="renderDashboard()">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="assets/Otomatiks logo.png" alt="Otomatiks Logo" class="logo-img">
+        <div class="small" id="who" style="margin-left:auto"></div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="badge">MENU</div>
+        <div class="nav" id="nav" style="margin-top:10px"></div>
+      </aside>
+
+      <main class="card">
+        <h1>Dashboard</h1>
+        <p class="muted">KPIs based on your role.</p>
+
+        <div class="kpi">
+          <div class="box">
+            <div class="muted">Students</div>
+            <div class="num" id="kStudents">0</div>
+          </div>
+          <div class="box">
+            <div class="muted">Sessions</div>
+            <div class="num" id="kSessions">0</div>
+          </div>
+          <div class="box">
+            <div class="muted">Unpaid Fees</div>
+            <div class="num" id="kUnpaid">0</div>
+          </div>
+          <div class="box">
+            <div class="muted">Partial Fees</div>
+            <div class="num" id="kPartial">0</div>
+          </div>
+        </div>
+
+        <div id="hint" style="margin-top:12px"></div>
+
+        <div id="parentView" style="display:none; margin-top:20px;">
+          <h2>Session Hours Summary</h2>
+          <div class="kpi" style="margin-bottom:20px;">
+            <div class="box">
+              <div class="muted">Total Hours</div>
+              <div class="num" id="pTotalHours">0</div>
+            </div>
+            <div class="box">
+              <div class="muted">Hours Used</div>
+              <div class="num" id="pUsedHours">0</div>
+            </div>
+            <div class="box" id="remainingBox">
+              <div class="muted">Remaining Hours</div>
+              <div class="num" id="pRemainingHours">0</div>
+            </div>
+          </div>
+
+          <h2>Children's Attendance History</h2>
+          <div class="scroll-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Program</th>
+                  <th>Status</th>
+                  <th>Remarks</th>
+                  <th>Date & Time</th>
+                </tr>
+              </thead>
+              <tbody id="dashAttendance"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+
+</html>

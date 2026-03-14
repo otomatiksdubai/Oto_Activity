@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Sessions / Timetable</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body onload="renderSessions()">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="assets/Otomatiks logo.png" alt="Otomatiks Logo" class="logo-img">
+        <div class="small" id="who" style="margin-left:auto"></div>
+      </div>
+      <div class="actions">
+
+        <button class="btn ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="badge">MENU</div>
+        <div class="nav" id="nav" style="margin-top:10px"></div>
+      </aside>
+
+      <main class="card">
+        <h1>Sessions</h1>
+        <p class="muted">Admin/Staff can create sessions. Trainer sees their own sessions.</p>
+
+        <div id="sessionForm">
+          <h2>Create Session</h2>
+          <div class="row3">
+            <div class="field"><label>Student Name</label>
+              <select id="seStudentName">
+                <!-- Populated by JS -->
+              </select>
+            </div>
+            <div class="field"><label>Program</label><input id="seProgram" placeholder="Robotics Basics"></div>
+            <div class="field"><label>Room</label><input id="seRoom" placeholder="Lab 1"></div>
+          </div>
+          <div class="row3">
+            <div class="field"><label>Allotment Day</label>
+              <select id="seDay">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+            </div>
+            <div class="field"><label>Allotment Time</label>
+              <select id="seTime">
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="02:00 PM">02:00 PM</option>
+                <option value="03:00 PM">03:00 PM</option>
+                <option value="04:00 PM">04:00 PM</option>
+                <option value="05:00 PM">05:00 PM</option>
+                <option value="06:00 PM">06:00 PM</option>
+              </select>
+            </div>
+            <div class="field"><label>Trainer</label>
+              <select id="seTrainer">
+                <!-- Populated by JS -->
+              </select>
+            </div>
+          </div>
+          <div class="row3">
+            <div class="field"><label>Duration</label>
+              <select id="seDuration">
+                <option value="1 Hour">1 Hour Session</option>
+                <option value="2 Hours">2 Hours Session</option>
+              </select>
+            </div>
+            <div class="field"><label>Total Hours (Package)</label>
+              <input id="seTotalHours" type="number" placeholder="e.g., 10" min="1">
+            </div>
+          </div>
+          <div class="row">
+            <p class="small" style="margin-top:5px; color:#888;">* Date is automatically set to creation date.</p>
+          </div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn ok" onclick="addSession()">Add Session</button>
+          </div>
+          <div id="seMsg" style="margin-top:10px"></div>
+          <hr>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Program</th>
+              <th>Day</th>
+              <th>Time</th>
+              <th>Duration</th>
+              <th>Total Hours</th>
+              <th>Remaining Hours</th>
+              <th>Room</th>
+              <th>Trainer</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="sessionsTable"></tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Attendance</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body onload="renderAttendance()">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="assets/Otomatiks logo.png" alt="Otomatiks Logo" class="logo-img">
+        <div class="small" id="who" style="margin-left:auto"></div>
+      </div>
+      <div class="actions">
+
+        <button class="btn ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="badge">MENU</div>
+        <div class="nav" id="nav" style="margin-top:10px"></div>
+      </aside>
+
+      <main class="card">
+        <h1>Attendance</h1>
+        <p class="muted">Select a session, then mark Present/Absent by Student ID.</p>
+
+        <div class="row">
+          <div class="field">
+            <label>Session</label>
+            <select id="attSession" onchange="renderAttendanceTable()"></select>
+          </div>
+          <div class="field">
+            <label>Tip</label>
+            <input disabled value="Enter Student Name to mark">
+          </div>
+        </div>
+
+        <div id="markBox" style="margin-top:10px">
+          <h2>Mark Attendance</h2>
+          <div class="row">
+            <div class="field"><label>Student Name</label>
+              <select id="attStudent">
+                <!-- Populated by JS -->
+              </select>
+            </div>
+            <div class="field"><label>Remarks (optional)</label><input id="attNotes" placeholder="Reason for status">
+            </div>
+          </div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn ok" onclick="markAttendance('present')">Present</button>
+            <button class="btn danger" onclick="markAttendance('absent')">Absent</button>
+          </div>
+          <div id="attMsg" style="margin-top:10px"></div>
+          <hr>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Status</th>
+              <th>Remarks</th>
+              <th>Date & Time Marked</th>
+            </tr>
+          </thead>
+          <tbody id="attTable"></tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+
+</html>
