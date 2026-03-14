@@ -40,71 +40,71 @@ export default function Login({ setUser }) {
   };
 
   return (
-    <div className="container" style={{ maxWidth: '500px' }}>
-      <div className="topbar">
-        <div className="brand">
-          <img src={logo} alt="Otomatiks Logo" className="logo-img" />
-        </div>
-      </div>
+    <div className="login-container">
+      <div className="bg-pattern"></div>
+      
+      <div className="login-card">
+        <img src={logo} alt="Otomatiks Logo" className="login-logo" />
+        
+        <h1 style={{ textAlign: 'center', marginBottom: '8px' }}>Welcome Back</h1>
+        <p className="muted" style={{ textAlign: 'center', marginBottom: '32px' }}>
+          Please enter your details to sign in
+        </p>
 
-      <div className="card" style={{ marginTop: '32px' }}>
-        <h1 style={{ textAlign: 'center', marginBottom: '24px' }}>Login</h1>
+        {error && <div className="alert-error" style={{ borderRadius: '12px', marginBottom: '24px' }}>{error}</div>}
 
         {/* Bubble Toggle Switch */}
-        <div className="login-toggle-wrapper">
-          <div className="login-toggle" onClick={() => toggleRole(role === 'parent' ? 'staff' : 'parent')}>
-            <div
-              className="toggle-bubble"
-              style={{
-                transform: role === 'parent' ? 'translateX(0)' : 'translateX(100%)'
-              }}
-            ></div>
-            <span className={`toggle-option ${role === 'parent' ? 'active' : ''}`}>Parent</span>
-            <span className={`toggle-option ${role !== 'parent' ? 'active' : ''}`}>Staff</span>
-          </div>
+        <div className="login-toggle" onClick={() => toggleRole(role === 'parent' ? 'staff' : 'parent')}>
+          <div
+            className="toggle-bubble"
+            style={{
+              transform: role === 'parent' ? 'translateX(0)' : 'translateX(100%)',
+              borderRadius: '12px'
+            }}
+          ></div>
+          <span className={`toggle-option ${role === 'parent' ? 'active' : ''}`}>Parent Portal</span>
+          <span className={`toggle-option ${role !== 'parent' ? 'active' : ''}`}>Staff Portal</span>
         </div>
-
-        <hr />
-
-        {error && <div className="alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <label>User Name</label>
+            <label>Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder={role === 'parent' ? 'Student name' : 'admin'}
               required
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
-          <div className="field">
+          <div className="field" style={{ marginTop: '16px' }}>
             <label>Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="••••••••"
               required
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
-          <div style={{ textAlign: 'right', marginTop: '8px' }}>
-            <a href="#" className="forgot-link" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>
-              Forgot username or password?
+          <div style={{ textAlign: 'right', marginTop: '12px' }}>
+            <a href="#" className="forgot-link" onClick={(e) => { e.preventDefault(); setShowForgot(true); }} style={{ fontSize: '12px', fontWeight: '600' }}>
+              Forgot password?
             </a>
           </div>
 
-          <div className="actions" style={{ marginTop: '20px' }}>
+          <div className="actions" style={{ marginTop: '32px' }}>
             <button
               type="submit"
-              className="btn"
-              style={{ width: '100%' }}
+              className="btn ok"
+              style={{ width: '100%', height: '52px', fontSize: '16px', borderRadius: '12px' }}
               disabled={loading}
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? 'Authenticating...' : 'Sign In'}
             </button>
           </div>
         </form>
