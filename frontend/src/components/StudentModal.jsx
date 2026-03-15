@@ -236,7 +236,7 @@ const StudentModal = ({ isOpen, onClose, student, onSaveSuccess }) => {
                         {isEditing && (
                             <div className="actions" style={{ marginTop: '20px', justifyContent: 'flex-end' }}>
                                 <button className="btn ghost" style={{ marginRight: '10px' }} onClick={() => setIsEditing(false)}>Cancel</button>
-                                <button className="btn ok" onClick={handleSave}>Save Changes</button>
+                                <button className="btn ok" onClick={() => handleSave()}>Save Changes</button>
                             </div>
                         )}
                     </>
