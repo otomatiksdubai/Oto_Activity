@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { staffAPI, authAPI } from '../services/api';
 import PasswordModal from '../components/PasswordModal';
 import ConfirmModal from '../components/ConfirmModal';
+import StaffModal from '../components/StaffModal';
 
 export default function Staff() {
   const [staff, setStaff] = useState([]);
@@ -19,6 +20,8 @@ export default function Staff() {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [viewMember, setViewMember] = useState(null);
 
   const requestSort = (key) => {
     let direction = 'asc';
@@ -55,6 +58,11 @@ export default function Staff() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleViewClick = (member) => {
+    setViewMember(member);
+    setShowViewModal(true);
   };
 
   const handleAddStaff = async (e) => {
@@ -216,21 +224,30 @@ export default function Staff() {
                   <td>{member.phone || '-'}</td>
                   <td>{member.specialization || '-'}</td>
                   <td>
-                    {userRole === 'admin' && (
+                    <div style={{ display: 'flex', gap: '5px' }}>
                       <button
-                        className={`btn ${isLocked ? 'ghost' : 'danger'}`}
-                        style={{
-                          padding: '4px 8px',
-                          fontSize: '12px',
-                          opacity: isLocked ? 0.3 : 1,
-                          cursor: isLocked ? 'not-allowed' : 'pointer'
-                        }}
-                        onClick={() => handleDeleteClick(member._id)}
-                        disabled={isLocked}
+                        className="btn ghost"
+                        style={{ padding: '4px 8px', fontSize: '12px' }}
+                        onClick={() => handleViewClick(member)}
                       >
-                        Delete
+                        View
                       </button>
-                    )}
+                      {userRole === 'admin' && (
+                        <button
+                          className={`btn ${isLocked ? 'ghost' : 'danger'}`}
+                          style={{
+                            padding: '4px 8px',
+                            fontSize: '12px',
+                            opacity: isLocked ? 0.3 : 1,
+                            cursor: isLocked ? 'not-allowed' : 'pointer'
+                          }}
+                          onClick={() => handleDeleteClick(member._id)}
+                          disabled={isLocked}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
@@ -255,6 +272,13 @@ export default function Staff() {
         onConfirm={handleConfirmDelete}
         title="Delete Staff Member?"
         message="Are you sure you want to remove this staff member? This will disable their login access."
+      />
+
+      <StaffModal
+        isOpen={showViewModal}
+        onClose={() => setShowViewModal(false)}
+        staffMember={viewMember}
+        onSaveSuccess={fetchStaff}
       />
     </>
   );
