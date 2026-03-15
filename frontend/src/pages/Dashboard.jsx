@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { studentAPI, sessionAPI, feesAPI, attendanceAPI } from '../services/api';
+import { studentAPI, sessionAPI, feesAPI, attendanceAPI, reportAPI } from '../services/api';
 import MarkAttendanceModal from '../components/MarkAttendanceModal';
 
 export default function Dashboard({ user }) {
@@ -10,7 +10,10 @@ export default function Dashboard({ user }) {
     partialFees: 0,
     totalHours: 0,
     usedHours: 0,
-    remainingHours: 0
+    remainingHours: 0,
+    dailySales: 0,
+    monthlySales: 0,
+    newAdmissions: 0
   });
   const [attendanceHistory, setAttendanceHistory] = useState([]);
   const [students, setStudents] = useState([]);
@@ -19,6 +22,60 @@ export default function Dashboard({ user }) {
   const [selectedSession, setSelectedSession] = useState(null);
   const [showMarkModal, setShowMarkModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [scheduleSort, setScheduleSort] = useState({ key: 'time', direction: 'asc' });
+  const [attendanceSort, setAttendanceSort] = useState({ key: 'date', direction: 'desc' });
+
+  const requestScheduleSort = (key) => {
+    let direction = 'asc';
+    if (scheduleSort.key === key && scheduleSort.direction === 'asc') {
+      direction = 'desc';
+    }
+    setScheduleSort({ key, direction });
+  };
+
+  const requestAttendanceSort = (key) => {
+    let direction = 'asc';
+    if (attendanceSort.key === key && attendanceSort.direction === 'asc') {
+      direction = 'desc';
+    }
+    setAttendanceSort({ key, direction });
+  };
+
+  const sortedSessions = React.useMemo(() => {
+    let items = [...todaySessions];
+    items.sort((a, b) => {
+      let aVal = a[scheduleSort.key];
+      let bVal = b[scheduleSort.key];
+      if (scheduleSort.key === 'student') {
+        aVal = a.student?.name || '';
+        bVal = b.student?.name || '';
+      }
+      if (aVal < bVal) return scheduleSort.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return scheduleSort.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return items;
+  }, [todaySessions, scheduleSort]);
+
+  const sortedAttendance = React.useMemo(() => {
+    let items = [...attendanceHistory];
+    items.sort((a, b) => {
+      let aVal = a[attendanceSort.key];
+      let bVal = b[attendanceSort.key];
+      if (attendanceSort.key === 'date') {
+        aVal = new Date(a.date);
+        bVal = new Date(b.date);
+      }
+      if (attendanceSort.key === 'student') {
+        aVal = a.student?.name || '';
+        bVal = b.student?.name || '';
+      }
+      if (aVal < bVal) return attendanceSort.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return attendanceSort.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return items;
+  }, [attendanceHistory, attendanceSort]);
 
   useEffect(() => {
   const fetchStats = async () => {
@@ -27,7 +84,9 @@ export default function Dashboard({ user }) {
         studentAPI.getAll(),
         sessionAPI.getAll(),
         feesAPI.getAll(),
-        attendanceAPI.getAll() // Fetch today's attendance regardless of role to check 'marked' status
+        attendanceAPI.getAll(),
+        reportAPI.getSales('daily'),
+        reportAPI.getSales('monthly')
       ];
 
       const results = await Promise.all(promises);
@@ -35,6 +94,8 @@ export default function Dashboard({ user }) {
       const sessionsRes = results[1];
       const feesRes = results[2];
       const attendanceRes = results[3];
+      const dailyRes = results[4];
+      const monthlyRes = results[5];
 
         const unpaid = feesRes.data.filter(f => f.status === 'unpaid' || f.status === 'pending').length;
         const partial = feesRes.data.filter(f => f.status === 'partial').length;
@@ -65,7 +126,10 @@ export default function Dashboard({ user }) {
           partialFees: partial,
           totalHours,
           remainingHours,
-          usedHours: totalHours - remainingHours
+          usedHours: totalHours - remainingHours,
+          dailySales: dailyRes?.data?.totalSales || 0,
+          monthlySales: monthlyRes?.data?.totalSales || 0,
+          newAdmissions: dailyRes?.data?.newAdmissionCount || 0
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -136,18 +200,36 @@ export default function Dashboard({ user }) {
             <div className="muted">Partial Fees</div>
             <div className="num">{stats.partialFees}</div>
           </div>
+          {user.role === 'admin' && (
+            <>
+              <div className="box" style={{ borderColor: 'var(--ok)' }}>
+                <div className="muted">Today's Sales</div>
+                <div className="num">AED {stats.dailySales}</div>
+              </div>
+              <div className="box" style={{ borderColor: 'var(--accent)' }}>
+                <div className="muted">Monthly Sales</div>
+                <div className="num">AED {stats.monthlySales}</div>
+              </div>
+              <div className="box" style={{ borderColor: 'var(--accent-pink)' }}>
+                <div className="muted">New Admissions</div>
+                <div className="num">{stats.newAdmissions}</div>
+              </div>
+            </>
+          )}
         </div>
       )}
 
       {user.role !== 'parent' && (
         <div style={{ marginTop: '20px' }}>
-          <h2>Today's Schedule ({new Date().toLocaleDateString('en-US', { weekday: 'long' })})</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <h2 style={{ margin: 0 }}>Today's Schedule ({new Date().toLocaleDateString('en-US', { weekday: 'long' })})</h2>
+          </div>
           <div className="scroll-table-container">
             <table>
               <thead>
                 <tr>
-                  <th>Time</th>
-                  <th>Student</th>
+                  <th onClick={() => requestScheduleSort('time')} style={{cursor: 'pointer'}}>Time {scheduleSort.key === 'time' ? (scheduleSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
+                  <th onClick={() => requestScheduleSort('student')} style={{cursor: 'pointer'}}>Student {scheduleSort.key === 'student' ? (scheduleSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
                   <th>Program</th>
                   <th>Room</th>
                   <th>Trainer</th>
@@ -161,7 +243,7 @@ export default function Dashboard({ user }) {
                     <td colSpan="7" style={{ textAlign: 'center' }} className="muted">No sessions scheduled for today</td>
                   </tr>
                 ) : (
-                  todaySessions.map(session => {
+                  sortedSessions.map(session => {
                     const past = isPast(session.time);
                     const status = getStatus(session._id, session.student?._id);
                     return (
@@ -226,17 +308,19 @@ export default function Dashboard({ user }) {
             </div>
           </div>
 
-          <h2>Children's Attendance History</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <h2 style={{ margin: 0 }}>Children's Attendance History</h2>
+          </div>
           <div className="scroll-table-container">
             <table>
               <thead>
                 <tr>
-                  <th>Student</th>
+                  <th onClick={() => requestAttendanceSort('student')} style={{cursor: 'pointer'}}>Student {attendanceSort.key === 'student' ? (attendanceSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
                   <th>Program</th>
                   <th>Status</th>
                   <th>Topics Covered</th>
                   <th>Remarks</th>
-                  <th>Date & Time</th>
+                  <th onClick={() => requestAttendanceSort('date')} style={{cursor: 'pointer'}}>Date & Time {attendanceSort.key === 'date' ? (attendanceSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
                 </tr>
               </thead>
               <tbody>
@@ -245,7 +329,7 @@ export default function Dashboard({ user }) {
                     <td colSpan="5" style={{ textAlign: 'center' }} className="muted">No attendance data yet</td>
                   </tr>
                 ) : (
-                  attendanceHistory.map(record => (
+                  sortedAttendance.map(record => (
                     <tr key={record._id}>
                       <td>{record.student?.name || 'Unknown'}</td>
                       <td>{record.session?.program || '-'}</td>

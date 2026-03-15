@@ -114,3 +114,27 @@ exports.deleteStudent = async (req, res) => {
     res.status(500).json({ message: 'Error deleting student', error: error.message });
   }
 };
+
+exports.levelUp = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newLevel, remarks } = req.body;
+
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    student.level = newLevel;
+    student.levelHistory.push({
+      level: newLevel,
+      date: new Date(),
+      remarks
+    });
+
+    await student.save();
+    res.json(student);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating level', error: error.message });
+  }
+};

@@ -22,6 +22,37 @@ export default function Sessions() {
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'student', direction: 'asc' });
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedSessions = React.useMemo(() => {
+    let items = [...sessions];
+    items.sort((a, b) => {
+      let aVal = a[sortConfig.key];
+      let bVal = b[sortConfig.key];
+      
+      if (sortConfig.key === 'student') {
+        aVal = a.student?.name || '';
+        bVal = b.student?.name || '';
+      }
+      if (sortConfig.key === 'trainer') {
+        aVal = a.trainer?.name || '';
+        bVal = b.trainer?.name || '';
+      }
+
+      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return items;
+  }, [sessions, sortConfig]);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -206,7 +237,7 @@ export default function Sessions() {
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }} className="no-print">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }} className="no-print">
         <h2 style={{ margin: 0 }}>Sessions List</h2>
       </div>
 
@@ -214,25 +245,23 @@ export default function Sessions() {
         <table>
           <thead>
             <tr>
-              <th>Student Name</th>
-              <th>Program</th>
-              <th>Day</th>
+              <th onClick={() => requestSort('student')} style={{cursor: 'pointer'}}>Student Name {sortConfig.key === 'student' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('program')} style={{cursor: 'pointer'}}>Program {sortConfig.key === 'program' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('day')} style={{cursor: 'pointer'}}>Day {sortConfig.key === 'day' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th>Time</th>
               <th>Duration</th>
               <th>Total Hours</th>
               <th>Remaining</th>
               <th>Room</th>
-              <th>Trainer</th>
+              <th onClick={() => requestSort('trainer')} style={{cursor: 'pointer'}}>Trainer {sortConfig.key === 'trainer' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr><td colSpan="10" style={{ textAlign: 'center' }}>Loading...</td></tr>
-            ) : sessions.length === 0 ? (
-              <tr><td colSpan="10" style={{ textAlign: 'center' }}>No sessions found</td></tr>
             ) : (
-              sessions.map((session) => (
+              sortedSessions.map((session) => (
                 <tr key={session._id}>
                   <td>{session.student?.name || 'Unknown'}</td>
                   <td>{session.program}</td>

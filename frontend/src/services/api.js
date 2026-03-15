@@ -31,6 +31,7 @@ export const studentAPI = {
   getById: (id) => api.get(`/students/${id}`),
   create: (data) => api.post('/students', data),
   update: (id, data) => api.put(`/students/${id}`, data),
+  levelUp: (id, data) => api.put(`/students/${id}/level-up`, data),
   delete: (id) => api.delete(`/students/${id}`)
 };
 
@@ -70,6 +71,13 @@ export const feesAPI = {
   recordPayment: (id, data) => api.post(`/fees/${id}/payment`, data),
   update: (id, data) => api.put(`/fees/${id}`, data),
   delete: (id) => api.delete(`/fees/${id}`)
+};
+
+// Reports API
+export const reportAPI = {
+  getSales: (period) => api.get(`/reports/sales?period=${period}`),
+  save: (data) => api.post('/reports', data),
+  getHistory: () => api.get('/reports/history')
 };
 
 export default api;

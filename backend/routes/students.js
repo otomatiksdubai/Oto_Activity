@@ -4,7 +4,8 @@ const {
   getStudentById,
   createStudent,
   updateStudent,
-  deleteStudent
+  deleteStudent,
+  levelUp
 } = require('../controllers/studentController');
 const { authMiddleware } = require('../middleware/auth');
 
@@ -14,6 +15,7 @@ router.get('/', authMiddleware, getAllStudents);
 router.get('/:id', authMiddleware, getStudentById);
 router.post('/', authMiddleware, createStudent);
 router.put('/:id', authMiddleware, updateStudent);
+router.put('/:id/level-up', authMiddleware, levelUp);
 router.delete('/:id', authMiddleware, deleteStudent);
 
 module.exports = router;
