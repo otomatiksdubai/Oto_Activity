@@ -6,12 +6,25 @@ import logo from '../assets/logo.png';
 export default function Login({ setUser }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [role, setRole] = useState('parent'); // Default to parent
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [forgotTab, setForgotTab] = useState('username');
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const savedUsername = localStorage.getItem('rememberedUsername');
+    const savedPassword = localStorage.getItem('rememberedPassword');
+    const savedRole = localStorage.getItem('rememberedRole');
+    if (savedUsername) {
+      setUsername(savedUsername);
+      if (savedPassword) setPassword(savedPassword);
+      if (savedRole) setRole(savedRole);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +37,16 @@ export default function Login({ setUser }) {
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
+
+      if (rememberMe) {
+        localStorage.setItem('rememberedUsername', username);
+        localStorage.setItem('rememberedPassword', password);
+        localStorage.setItem('rememberedRole', role);
+      } else {
+        localStorage.removeItem('rememberedUsername');
+        localStorage.removeItem('rememberedPassword');
+        localStorage.removeItem('rememberedRole');
+      }
 
       setUser(user);
       navigate('/dashboard');
@@ -74,6 +97,7 @@ export default function Login({ setUser }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder={role === 'parent' ? 'Student name' : 'admin'}
+              autoComplete="username"
               required
               style={{ borderRadius: '12px' }}
             />
@@ -86,12 +110,22 @@ export default function Login({ setUser }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              autoComplete="current-password"
               required
               style={{ borderRadius: '12px' }}
             />
           </div>
 
-          <div style={{ textAlign: 'right', marginTop: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: 'var(--muted)' }}>
+              <input 
+                type="checkbox" 
+                checked={rememberMe} 
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: 'var(--accent)' }}
+              />
+              Remember Me
+            </label>
             <a href="#" className="forgot-link" onClick={(e) => { e.preventDefault(); setShowForgot(true); }} style={{ fontSize: '12px', fontWeight: '600' }}>
               Forgot password?
             </a>
