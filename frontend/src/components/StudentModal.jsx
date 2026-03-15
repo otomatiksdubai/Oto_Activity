@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { studentAPI, attendanceAPI } from '../services/api';
+import { studentAPI, attendanceAPI, courseAPI } from '../services/api';
 
 const StudentModal = ({ isOpen, onClose, student, onSaveSuccess }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -16,11 +16,22 @@ const StudentModal = ({ isOpen, onClose, student, onSaveSuccess }) => {
     });
     const [newTopic, setNewTopic] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [courses, setCourses] = useState([]);
 
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('user') || '{}');
         setUserRole(userData.role || '');
+        fetchCourses();
     }, []);
+
+    const fetchCourses = async () => {
+        try {
+            const res = await courseAPI.getAll();
+            setCourses(res.data);
+        } catch (error) {
+            console.error('Failed to fetch courses:', error);
+        }
+    };
 
     useEffect(() => {
         if (student) {
@@ -169,7 +180,34 @@ const StudentModal = ({ isOpen, onClose, student, onSaveSuccess }) => {
                             <div className="field">
                                 <label>Course Enrolled</label>
                                 {isEditing ? (
-                                    <input value={formData.courseEnrolled} onChange={(e) => setFormData({ ...formData, courseEnrolled: e.target.value })} />
+                                    <select 
+                                        value={formData.courseEnrolled} 
+                                        onChange={async (e) => {
+                                            if (e.target.value === 'ADD_NEW') {
+                                                const newCourseName = prompt('Enter new course name:');
+                                                if (newCourseName) {
+                                                    try {
+                                                        await courseAPI.create({ name: newCourseName });
+                                                        await fetchCourses();
+                                                        setFormData({ ...formData, courseEnrolled: newCourseName });
+                                                    } catch (err) {
+                                                        alert('Failed to add course');
+                                                    }
+                                                }
+                                            } else {
+                                                setFormData({ ...formData, courseEnrolled: e.target.value });
+                                            }
+                                        }}
+                                        required
+                                    >
+                                        <option value="">Select a course</option>
+                                        {courses.map(c => (
+                                            <option key={c._id} value={c.name}>{c.name}</option>
+                                        ))}
+                                        {userRole === 'admin' && (
+                                            <option value="ADD_NEW" style={{ fontWeight: 'bold', color: 'var(--accent)' }}>+ Add New Course...</option>
+                                        )}
+                                    </select>
                                 ) : (
                                     <p>{student.courseEnrolled || '-'}</p>
                                 )}
