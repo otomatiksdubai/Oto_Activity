@@ -53,6 +53,10 @@ export default function Staff() {
     try {
       const response = await staffAPI.getAll();
       setStaff(response.data);
+      if (viewMember) {
+        const updated = response.data.find(s => s._id === viewMember._id);
+        if (updated) setViewMember(updated);
+      }
     } catch (error) {
       console.error('Error fetching staff:', error);
     } finally {

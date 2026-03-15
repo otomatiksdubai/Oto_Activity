@@ -85,6 +85,10 @@ export default function Students() {
     try {
       const response = await studentAPI.getAll();
       setStudents(response.data);
+      if (selectedStudent) {
+        const updated = response.data.find(s => s._id === selectedStudent._id);
+        if (updated) setSelectedStudent(updated);
+      }
     } catch (error) {
       console.error('Error fetching students:', error);
     } finally {
