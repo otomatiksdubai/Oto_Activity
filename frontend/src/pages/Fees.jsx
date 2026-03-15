@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { feesAPI, studentAPI } from '../services/api';
+import { feesAPI, studentAPI, courseAPI } from '../services/api';
 import logo from '../assets/logo.png';
 import Select from 'react-select';
 
@@ -9,10 +9,11 @@ export default function Fees() {
   const [formData, setFormData] = useState({
     studentName: '',
     status: 'unpaid',
-    course: 'Robotics Level 1',
+    course: '',
     amount: '',
     discount: '0'
   });
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState('');
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -66,12 +67,14 @@ export default function Fees() {
 
   const fetchData = async () => {
     try {
-      const [feesRes, studentsRes] = await Promise.all([
+      const [feesRes, studentsRes, coursesRes] = await Promise.all([
         feesAPI.getAll(),
-        studentAPI.getAll()
+        studentAPI.getAll(),
+        courseAPI.getAll()
       ]);
       setFees(feesRes.data);
       setStudents(studentsRes.data);
+      setCourses(coursesRes.data);
     } catch (error) {
       console.error('Error fetching fees data:', error);
     } finally {
@@ -168,12 +171,32 @@ export default function Fees() {
                   <label>Course</label>
                   <select
                     value={formData.course}
-                    onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+                    onChange={async (e) => {
+                      if (e.target.value === 'ADD_NEW') {
+                        const newCourseName = prompt('Enter new course name:');
+                        if (newCourseName) {
+                          try {
+                            await courseAPI.create({ name: newCourseName });
+                            const res = await courseAPI.getAll();
+                            setCourses(res.data);
+                            setFormData({ ...formData, course: newCourseName });
+                          } catch (err) {
+                            alert('Failed to add course');
+                          }
+                        }
+                      } else {
+                        setFormData({ ...formData, course: e.target.value });
+                      }
+                    }}
+                    required
                   >
-                    <option value="Robotics Level 1">Robotics Level 1</option>
-                    <option value="Level 1 and 2 Combined">Level 1 and 2 Combined</option>
-                    <option value="Level Up">Level Up</option>
-                    <option value="3D Printing">3D Printing</option>
+                    <option value="">Select Course</option>
+                    {courses.map(c => (
+                      <option key={c._id} value={c.name}>{c.name}</option>
+                    ))}
+                    {userRole === 'admin' && (
+                      <option value="ADD_NEW" style={{ fontWeight: 'bold', color: 'var(--accent)' }}>+ Add New Course...</option>
+                    )}
                   </select>
                 </div>
                 <div className="field">

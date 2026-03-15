@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { studentAPI, authAPI } from '../services/api';
+import { studentAPI, authAPI, courseAPI } from '../services/api';
 import PasswordModal from '../components/PasswordModal';
 import ConfirmModal from '../components/ConfirmModal';
 import StudentModal from '../components/StudentModal';
@@ -7,6 +7,7 @@ import LevelUpModal from '../components/LevelUpModal';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     grade: '',
@@ -68,7 +69,17 @@ export default function Students() {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
     setUserRole(userData.role || '');
     fetchStudents();
+    fetchCourses();
   }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await courseAPI.getAll();
+      setCourses(response.data);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  };
 
   const fetchStudents = async () => {
     try {
@@ -198,11 +209,34 @@ export default function Students() {
               </div>
               <div className="field">
                 <label>Course Enrolled</label>
-                <input
+                <select
                   value={formData.courseEnrolled}
-                  onChange={(e) => setFormData({ ...formData, courseEnrolled: e.target.value })}
-                  placeholder="e.g., Robotics Basics, Arduino Level 1"
-                />
+                  onChange={async (e) => {
+                    if (e.target.value === 'ADD_NEW') {
+                      const newCourse = prompt('Enter new course name:');
+                      if (newCourse) {
+                        try {
+                          await courseAPI.create({ name: newCourse });
+                          await fetchCourses();
+                          setFormData({ ...formData, courseEnrolled: newCourse });
+                        } catch (err) {
+                          alert('Failed to add course');
+                        }
+                      }
+                    } else {
+                      setFormData({ ...formData, courseEnrolled: e.target.value });
+                    }
+                  }}
+                  required
+                >
+                  <option value="">Select a course</option>
+                  {courses.map(c => (
+                    <option key={c._id} value={c.name}>{c.name}</option>
+                  ))}
+                  {userRole === 'admin' && (
+                    <option value="ADD_NEW" style={{ fontWeight: 'bold', color: 'var(--accent)' }}>+ Add New Course...</option>
+                  )}
+                </select>
               </div>
             </div>
             <div className="actions" style={{ marginTop: '10px' }}>

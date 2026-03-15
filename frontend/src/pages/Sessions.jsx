@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { sessionAPI, studentAPI, staffAPI } from '../services/api';
+import { sessionAPI, studentAPI, staffAPI, courseAPI } from '../services/api';
 import ConfirmModal from '../components/ConfirmModal';
 import Select from 'react-select';
 
@@ -17,6 +17,7 @@ export default function Sessions() {
     duration: '1 Hour',
     totalHours: ''
   });
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState('');
   const [showUnlockModal, setShowUnlockModal] = useState(false);
@@ -62,14 +63,16 @@ export default function Sessions() {
 
   const fetchData = async () => {
     try {
-      const [sessionsRes, studentsRes, staffRes] = await Promise.all([
+      const [sessionsRes, studentsRes, staffRes, coursesRes] = await Promise.all([
         sessionAPI.getAll(),
         studentAPI.getAll(),
-        staffAPI.getAll()
+        staffAPI.getAll(),
+        courseAPI.getAll()
       ]);
       setSessions(sessionsRes.data);
       setStudents(studentsRes.data);
       setTrainers(staffRes.data.filter(s => s.role === 'trainer' || s.role === 'admin'));
+      setCourses(coursesRes.data);
     } catch (error) {
       console.error('Error fetching sessions data:', error);
     } finally {
@@ -152,13 +155,36 @@ export default function Sessions() {
                 />
               </div>
               <div className="field">
-                <label>Program</label>
-                <input
+                <label>Program (Course)</label>
+                <select
                   value={formData.program}
-                  onChange={(e) => setFormData({ ...formData, program: e.target.value })}
-                  placeholder="Robotics Basics"
+                  onChange={async (e) => {
+                    if (e.target.value === 'ADD_NEW') {
+                      const newCourseName = prompt('Enter new course name:');
+                      if (newCourseName) {
+                        try {
+                          await courseAPI.create({ name: newCourseName });
+                          const res = await courseAPI.getAll();
+                          setCourses(res.data);
+                          setFormData({ ...formData, program: newCourseName });
+                        } catch (err) {
+                          alert('Failed to add course');
+                        }
+                      }
+                    } else {
+                      setFormData({ ...formData, program: e.target.value });
+                    }
+                  }}
                   required
-                />
+                >
+                  <option value="">Select Program</option>
+                  {courses.map(c => (
+                    <option key={c._id} value={c.name}>{c.name}</option>
+                  ))}
+                  {userRole === 'admin' && (
+                    <option value="ADD_NEW" style={{ fontWeight: 'bold', color: 'var(--accent)' }}>+ Add New Course...</option>
+                  )}
+                </select>
               </div>
               <div className="field">
                 <label>Room</label>

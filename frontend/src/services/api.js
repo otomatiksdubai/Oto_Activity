@@ -80,4 +80,11 @@ export const reportAPI = {
   getHistory: () => api.get('/reports/history')
 };
 
+// Courses API
+export const courseAPI = {
+  getAll: () => api.get('/courses'),
+  create: (data) => api.post('/courses', data),
+  delete: (id) => api.delete(`/courses/${id}`)
+};
+
 export default api;
