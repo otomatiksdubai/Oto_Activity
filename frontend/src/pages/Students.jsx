@@ -3,6 +3,7 @@ import { studentAPI, authAPI } from '../services/api';
 import PasswordModal from '../components/PasswordModal';
 import ConfirmModal from '../components/ConfirmModal';
 import StudentModal from '../components/StudentModal';
+import LevelUpModal from '../components/LevelUpModal';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -21,6 +22,47 @@ export default function Students() {
   const [deletingId, setDeletingId] = useState(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showLevelUpModal, setShowLevelUpModal] = useState(false);
+  const [levelingStudent, setLevelingStudent] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedStudents = React.useMemo(() => {
+    let sortableItems = [...students];
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        let aVal = a[sortConfig.key];
+        let bVal = b[sortConfig.key];
+        if (sortConfig.key === 'createdAt') {
+          aVal = new Date(a.createdAt);
+          bVal = new Date(b.createdAt);
+        }
+        if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [students, sortConfig]);
+
+  const filteredStudents = React.useMemo(() => {
+    return sortedStudents.filter(s => 
+      s.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.studentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.grade?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.schoolName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.courseEnrolled?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.parentPhone?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [sortedStudents, searchTerm]);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -63,6 +105,16 @@ export default function Students() {
   const handleViewClick = (student) => {
     setSelectedStudent(student);
     setShowStudentModal(true);
+  };
+
+  const handleLevelUpClick = (student) => {
+    setLevelingStudent(student);
+    setShowLevelUpModal(true);
+  };
+
+  const handleLevelUpSuccess = async (id, data) => {
+    await studentAPI.levelUp(id, data);
+    fetchStudents();
   };
 
   const handleConfirmDelete = async () => {
@@ -161,9 +213,19 @@ export default function Students() {
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }} className="no-print">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }} className="no-print">
         <h2 style={{ margin: 0 }}>Students List</h2>
-        {userRole === 'admin' && (
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div className="search-box">
+             <input 
+               type="text" 
+               placeholder="Search..." 
+               value={searchTerm}
+               onChange={(e) => setSearchTerm(e.target.value)}
+               style={{ padding: '8px 12px 8px 35px', borderRadius: '20px', border: '1px solid var(--border)', background: 'var(--card-bg) url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>\') no-repeat 12px center' }}
+             />
+          </div>
+          {userRole === 'admin' && (
           <button
             className="btn ghost"
             onClick={handleToggleLock}
@@ -172,56 +234,72 @@ export default function Students() {
             {isLocked ? '🔒 Locked (Unlock Delete)' : '🔓 Unlocked (Lock Delete)'}
           </button>
         )}
+        </div>
       </div>
 
       <div className="scroll-table-container no-print">
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Grade</th>
-              <th>School</th>
-              <th>Course Enrolled</th>
+              <th onClick={() => requestSort('name')} style={{cursor: 'pointer'}}>Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('grade')} style={{cursor: 'pointer'}}>Grade {sortConfig.key === 'grade' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('schoolName')} style={{cursor: 'pointer'}}>School {sortConfig.key === 'schoolName' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('courseEnrolled')} style={{cursor: 'pointer'}}>Course Enrolled {sortConfig.key === 'courseEnrolled' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('level')} style={{cursor: 'pointer'}}>Level {sortConfig.key === 'level' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+              <th onClick={() => requestSort('createdAt')} style={{cursor: 'pointer'}}>Admission Date {sortConfig.key === 'createdAt' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th>Parent Phone</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="6" style={{ textAlign: 'center' }}>Loading...</td></tr>
-            ) : students.length === 0 ? (
-              <tr><td colSpan="6" style={{ textAlign: 'center' }}>No students found</td></tr>
+              <tr><td colSpan="8" style={{ textAlign: 'center' }}>Loading...</td></tr>
             ) : (
-              students.map((student) => (
+              filteredStudents.map((student) => (
                 <tr key={student._id}>
                   <td>{student.name}</td>
                   <td>{student.grade}</td>
                   <td>{student.schoolName}</td>
                   <td>{student.courseEnrolled}</td>
+                  <td>
+                    <span className="badge" style={{ background: 'var(--accent)', color: '#fff' }}>Lvl {student.level || 1}</span>
+                  </td>
+                  <td>{new Date(student.createdAt).toLocaleDateString()}</td>
                   <td>{student.parentPhone}</td>
                   <td>
-                    <button
-                      className="btn ghost"
-                      style={{ padding: '4px 8px', fontSize: '12px', marginRight: '8px' }}
-                      onClick={() => handleViewClick(student)}
-                    >
-                      View
-                    </button>
-                    {userRole === 'admin' && (
+                    <div style={{ display: 'flex', gap: '5px' }}>
                       <button
-                        className={`btn ${isLocked ? 'ghost' : 'danger'}`}
-                        style={{
-                          padding: '4px 8px',
-                          fontSize: '12px',
-                          opacity: isLocked ? 0.3 : 1,
-                          cursor: isLocked ? 'not-allowed' : 'pointer'
-                        }}
-                        onClick={() => handleDeleteClick(student._id)}
-                        disabled={isLocked}
+                        className="btn ghost"
+                        style={{ padding: '4px 8px', fontSize: '12px' }}
+                        onClick={() => handleViewClick(student)}
                       >
-                        Delete
+                        View
                       </button>
-                    )}
+                      {userRole !== 'parent' && (
+                        <button
+                          className="btn ok"
+                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                          onClick={() => handleLevelUpClick(student)}
+                        >
+                          Level Up
+                        </button>
+                      )}
+                      {userRole === 'admin' && (
+                        <button
+                          className={`btn ${isLocked ? 'ghost' : 'danger'}`}
+                          style={{
+                            padding: '4px 8px',
+                            fontSize: '12px',
+                            opacity: isLocked ? 0.3 : 1,
+                            cursor: isLocked ? 'not-allowed' : 'pointer'
+                          }}
+                          onClick={() => handleDeleteClick(student._id)}
+                          disabled={isLocked}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
@@ -253,6 +331,13 @@ export default function Students() {
         onClose={() => setShowStudentModal(false)}
         student={selectedStudent}
         onSaveSuccess={fetchStudents}
+      />
+
+      <LevelUpModal
+        isOpen={showLevelUpModal}
+        onClose={() => setShowLevelUpModal(false)}
+        student={levelingStudent}
+        onLevelUpSuccess={handleLevelUpSuccess}
       />
     </>
   );

@@ -15,6 +15,37 @@ export default function Attendance() {
   const [currentStudentDetails, setCurrentStudentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedAttendance = React.useMemo(() => {
+    let items = [...attendance];
+    items.sort((a, b) => {
+      let aVal = a[sortConfig.key];
+      let bVal = b[sortConfig.key];
+      
+      if (sortConfig.key === 'date') {
+        aVal = new Date(a.date);
+        bVal = new Date(b.date);
+      }
+      if (sortConfig.key === 'student') {
+        aVal = a.student?.name || '';
+        bVal = b.student?.name || '';
+      }
+
+      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return items;
+  }, [attendance, sortConfig]);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -192,21 +223,25 @@ export default function Attendance() {
         </div>
       )}
 
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }} className="no-print">
+        <h2 style={{ margin: 0 }}>Attendance Records</h2>
+      </div>
+
       <table>
         <thead>
           <tr>
-            <th>Student Name</th>
+            <th onClick={() => requestSort('student')} style={{cursor: 'pointer'}}>Student Name {sortConfig.key === 'student' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
             <th>Status</th>
             <th>Topics Covered</th>
             <th>Remarks</th>
-            <th>Date & Time Marked</th>
+            <th onClick={() => requestSort('date')} style={{cursor: 'pointer'}}>Date & Time {sortConfig.key === 'date' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
           </tr>
         </thead>
         <tbody>
-          {attendance.length === 0 ? (
+          {sortedAttendance.length === 0 ? (
             <tr><td colSpan="5" style={{ textAlign: 'center' }}>No attendance records for this session</td></tr>
           ) : (
-            attendance.map((record) => (
+            sortedAttendance.map((record) => (
               <tr key={record._id}>
                 <td>{record.student?.name || 'Unknown'}</td>
                 <td>

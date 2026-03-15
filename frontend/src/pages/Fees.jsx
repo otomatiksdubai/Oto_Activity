@@ -16,6 +16,47 @@ export default function Fees() {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState('');
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedFees = React.useMemo(() => {
+    let items = [...fees];
+    items.sort((a, b) => {
+      let aVal = a[sortConfig.key];
+      let bVal = b[sortConfig.key];
+      
+      if (sortConfig.key === 'createdAt') {
+        aVal = new Date(a.createdAt);
+        bVal = new Date(b.createdAt);
+      }
+      if (sortConfig.key === 'student') {
+        aVal = a.student?.name || a.studentName || '';
+        bVal = b.student?.name || b.studentName || '';
+      }
+
+      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return items;
+  }, [fees, sortConfig]);
+
+  const filteredFees = React.useMemo(() => {
+    return sortedFees.filter(f => 
+      (f.student?.name || f.studentName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (f.invoiceId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (f.course || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (f.status || '').toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [sortedFees, searchTerm]);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -163,39 +204,50 @@ export default function Fees() {
           </div>
         )}
 
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }} className="no-print">
+          <h2 style={{ margin: 0 }}>Invoices List</h2>
+          <div className="search-box">
+             <input 
+               type="text" 
+               placeholder="Search..." 
+               value={searchTerm}
+               onChange={(e) => setSearchTerm(e.target.value)}
+               style={{ padding: '8px 12px 8px 35px', borderRadius: '20px', border: '1px solid var(--border)', background: 'var(--card-bg) url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>\') no-repeat 12px center' }}
+             />
+          </div>
+        </div>
+
         <div className="scroll-table-container">
           <table>
             <thead>
               <tr>
-                <th>Invoice</th>
-                <th>Student Name</th>
+                <th onClick={() => requestSort('invoiceId')} style={{cursor: 'pointer'}}>Invoice {sortConfig.key === 'invoiceId' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+                <th onClick={() => requestSort('student')} style={{cursor: 'pointer'}}>Student Name {sortConfig.key === 'student' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
                 <th>Course</th>
                 <th>Price</th>
-                <th>Discount</th>
                 <th>Total</th>
-                <th>Status</th>
+                <th onClick={() => requestSort('status')} style={{cursor: 'pointer'}}>Status {sortConfig.key === 'status' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+                <th onClick={() => requestSort('createdAt')} style={{cursor: 'pointer'}}>Date {sortConfig.key === 'createdAt' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr><td colSpan="8" style={{ textAlign: 'center' }}>Loading...</td></tr>
-              ) : fees.length === 0 ? (
-                <tr><td colSpan="8" style={{ textAlign: 'center' }}>No invoices found</td></tr>
               ) : (
-                fees.map((fee, index) => (
+                filteredFees.map((fee, index) => (
                   <tr key={fee._id}>
                     <td>{fee.invoiceId || `INV-${1000 + index}`}</td>
                     <td>{fee.student?.name || fee.studentName || 'Unknown'}</td>
                     <td>{fee.course || 'Course'}</td>
                     <td>{fee.amount}</td>
-                    <td>{fee.discount || 0}</td>
                     <td>{(fee.amount - (fee.discount || 0))}</td>
                     <td>
                       <span className={`badge ${fee.status === 'paid' ? 'green' : fee.status === 'partial' ? 'gold' : 'red'}`}>
                         {fee.status.toUpperCase()}
                       </span>
                     </td>
+                    <td>{new Date(fee.createdAt).toLocaleDateString()}</td>
                     <td>
                       <div className="actions" style={{ justifyContent: 'flex-start' }}>
                         <button

@@ -63,6 +63,7 @@ const staffRoutes = require('./routes/staff');
 const sessionRoutes = require('./routes/sessions');
 const attendanceRoutes = require('./routes/attendance');
 const feesRoutes = require('./routes/fees');
+const reportRoutes = require('./routes/reports');
 
 // Use Routes
 app.use((req, res, next) => {
@@ -76,6 +77,7 @@ app.use('/api/staff', staffRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/fees', feesRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

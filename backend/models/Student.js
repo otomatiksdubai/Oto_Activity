@@ -27,6 +27,15 @@ const studentSchema = new mongoose.Schema({
     completedAt: Date,
     remarks: String
   }],
+  level: {
+    type: Number,
+    default: 1
+  },
+  levelHistory: [{
+    level: Number,
+    date: { type: Date, default: Date.now },
+    remarks: String
+  }],
   status: {
     type: String,
     enum: ['active', 'inactive', 'graduated'],

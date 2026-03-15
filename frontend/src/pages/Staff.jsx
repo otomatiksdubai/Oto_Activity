@@ -18,6 +18,27 @@ export default function Staff() {
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedStaff = React.useMemo(() => {
+    let items = [...staff];
+    items.sort((a, b) => {
+      let aVal = a[sortConfig.key] || '';
+      let bVal = b[sortConfig.key] || '';
+      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return items;
+  }, [staff, sortConfig]);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -156,26 +177,28 @@ export default function Staff() {
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }} className="no-print">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }} className="no-print">
         <h2 style={{ margin: 0 }}>Staff Members List</h2>
-        {userRole === 'admin' && (
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          {userRole === 'admin' && (
           <button
             className="btn ghost"
             onClick={handleToggleLock}
             style={{ fontWeight: 'bold' }}
           >
-            {isLocked ? '🔒 Locked (Unlock Delete)' : '🔓 Unlocked (Lock Delete)'}
+             {isLocked ? '🔒 Locked (Unlock Delete)' : '🔓 Unlocked (Lock Delete)'}
           </button>
         )}
+        </div>
       </div>
 
       <div className="scroll-table-container no-print">
         <table>
           <thead>
             <tr>
-              <th>Name</th>
+              <th onClick={() => requestSort('name')} style={{cursor: 'pointer'}}>Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th>Email</th>
-              <th>Role</th>
+              <th onClick={() => requestSort('role')} style={{cursor: 'pointer'}}>Role {sortConfig.key === 'role' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th>Phone</th>
               <th>Specialization</th>
               <th>Actions</th>
@@ -184,10 +207,8 @@ export default function Staff() {
           <tbody>
             {loading ? (
               <tr><td colSpan="6" style={{ textAlign: 'center' }}>Loading...</td></tr>
-            ) : staff.length === 0 ? (
-              <tr><td colSpan="6" style={{ textAlign: 'center' }}>No staff members found</td></tr>
             ) : (
-              staff.map((member) => (
+              sortedStaff.map((member) => (
                 <tr key={member._id}>
                   <td>{member.name}</td>
                   <td>{member.email || '-'}</td>

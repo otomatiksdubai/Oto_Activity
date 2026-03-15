@@ -7,6 +7,7 @@ import Staff from './pages/Staff';
 import Sessions from './pages/Sessions';
 import Attendance from './pages/Attendance';
 import Fees from './pages/Fees';
+import Reports from './pages/Reports';
 import logo from './assets/logo.png';
 
 import Landing from './pages/Landing';
@@ -45,7 +46,8 @@ function App() {
     { name: 'Staff', path: '/staff', roles: ['admin'] },
     { name: 'Sessions', path: '/sessions', roles: ['admin', 'staff', 'trainer'] },
     { name: 'Attendance', path: '/attendance', roles: ['admin', 'staff', 'trainer'] },
-    { name: 'Fees/Invoices', path: '/fees', roles: ['admin', 'staff', 'parent'] }
+    { name: 'Fees/Invoices', path: '/fees', roles: ['admin', 'staff', 'parent'] },
+    { name: 'Reports', path: '/reports', roles: ['admin'] }
   ];
 
   const navigation = user ? allNavigation.filter(item => item.roles.includes(user.role)) : [];
@@ -112,6 +114,7 @@ function App() {
             <Route path="/sessions" element={<Sessions />} />
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/fees" element={<Fees />} />
+            <Route path="/reports" element={<Reports />} />
           </Routes>
         </main>
       </div>
