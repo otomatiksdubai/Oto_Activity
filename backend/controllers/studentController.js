@@ -118,7 +118,7 @@ exports.deleteStudent = async (req, res) => {
 exports.levelUp = async (req, res) => {
   try {
     const { id } = req.params;
-    const { newLevel, remarks } = req.body;
+    const { newLevel, course, remarks } = req.body;
 
     const student = await Student.findById(id);
     if (!student) {
@@ -126,8 +126,11 @@ exports.levelUp = async (req, res) => {
     }
 
     student.level = newLevel;
+    if (course) student.courseEnrolled = course;
+
     student.levelHistory.push({
       level: newLevel,
+      course: course || student.courseEnrolled,
       date: new Date(),
       remarks
     });

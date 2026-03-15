@@ -375,6 +375,8 @@ export default function Students() {
         isOpen={showLevelUpModal}
         onClose={() => setShowLevelUpModal(false)}
         student={levelingStudent}
+        courses={courses}
+        fetchCourses={fetchCourses}
         onLevelUpSuccess={handleLevelUpSuccess}
       />
     </>
