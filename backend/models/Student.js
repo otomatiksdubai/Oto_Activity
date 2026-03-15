@@ -33,6 +33,7 @@ const studentSchema = new mongoose.Schema({
   },
   levelHistory: [{
     level: Number,
+    course: String,
     date: { type: Date, default: Date.now },
     remarks: String
   }],
