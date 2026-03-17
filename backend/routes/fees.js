@@ -7,15 +7,15 @@ const {
   updateFee,
   deleteFee
 } = require('../controllers/feeController');
-const { authMiddleware } = require('../middleware/auth');
+const { authMiddleware, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
 router.get('/', authMiddleware, getAllFees);
 router.get('/student/:studentId', authMiddleware, getFeesByStudent);
-router.post('/', authMiddleware, createFee);
-router.post('/:id/payment', authMiddleware, recordPayment);
-router.put('/:id', authMiddleware, updateFee);
-router.delete('/:id', authMiddleware, deleteFee);
+router.post('/', authMiddleware, requireRole('admin'), createFee);
+router.post('/:id/payment', authMiddleware, requireRole('admin'), recordPayment);
+router.put('/:id', authMiddleware, requireRole('admin'), updateFee);
+router.delete('/:id', authMiddleware, requireRole('admin'), deleteFee);
 
 module.exports = router;

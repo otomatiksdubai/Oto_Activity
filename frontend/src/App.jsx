@@ -43,11 +43,11 @@ function App() {
   const allNavigation = [
     { name: 'Dashboard', path: '/dashboard', roles: ['admin', 'staff', 'trainer', 'parent'] },
     { name: 'Students', path: '/students', roles: ['admin', 'staff', 'trainer'] },
-    { name: 'Staff', path: '/staff', roles: ['admin'] },
+    { name: 'Staff', path: '/staff', roles: ['admin', 'staff'] },
     { name: 'Sessions', path: '/sessions', roles: ['admin', 'staff', 'trainer'] },
     { name: 'Attendance', path: '/attendance', roles: ['admin', 'staff', 'trainer'] },
     { name: 'Fees/Invoices', path: '/fees', roles: ['admin', 'staff', 'parent'] },
-    { name: 'Reports', path: '/reports', roles: ['admin'] }
+    { name: 'Reports', path: '/reports', roles: ['admin', 'staff'] }
   ];
 
   const navigation = user ? allNavigation.filter(item => item.roles.includes(user.role)) : [];

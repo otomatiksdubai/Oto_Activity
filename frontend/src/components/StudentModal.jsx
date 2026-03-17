@@ -97,10 +97,8 @@ const StudentModal = ({ isOpen, onClose, student, onSaveSuccess }) => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <h2 style={{ margin: 0 }}>Student Details</h2>
                     <div>
-                        {!isEditing && activeTab === 'details' && (
-                            <button className="btn" style={{ marginRight: '10px' }} onClick={() => setIsEditing(true)}>
-                                Edit
-                            </button>
+                        {!isEditing && activeTab === 'details' && (userRole === 'admin' || userRole === 'trainer') && (
+                            <button className="btn ok" onClick={() => setIsEditing(true)} style={{ marginRight: '10px' }}>Edit Information</button>
                         )}
                         <button className="btn ghost" onClick={onClose} style={{ padding: '4px 8px', fontSize: '20px' }}>
                             &times;

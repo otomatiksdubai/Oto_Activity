@@ -167,9 +167,9 @@ export default function Students() {
   return (
     <>
       <h1>Students</h1>
-      <p className="muted">Admin/Staff can add students. Only Admin can delete. Parent accounts are created automatically (Username: Student Name, Password: Parent Phone Number).</p>
+      <p className="muted">Admin can add and delete students. Staff can monitor all records. Parent accounts are created automatically (Username: Student Name, Password: Parent Phone Number).</p>
 
-      {userRole !== 'parent' && (
+      {(userRole === 'admin' || userRole === 'trainer') && (
         <div id="studentForm" className="no-print">
           <h2>Add Student</h2>
           <form onSubmit={handleAddStudent}>
@@ -313,7 +313,7 @@ export default function Students() {
                       >
                         View
                       </button>
-                      {userRole !== 'parent' && (
+                      {(userRole === 'admin' || userRole === 'trainer') && (
                         <button
                           className="btn ok"
                           style={{ padding: '4px 8px', fontSize: '12px' }}

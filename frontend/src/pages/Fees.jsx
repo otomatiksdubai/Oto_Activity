@@ -122,7 +122,7 @@ export default function Fees() {
       <div className="no-print">
         <h1>Fees / Invoices</h1>
 
-        {userRole !== 'parent' && (
+        {userRole === 'admin' && (
           <div id="feeForm">
             <h2>Create Invoice</h2>
             <form onSubmit={handleCreateInvoice}>
@@ -280,7 +280,7 @@ export default function Fees() {
                         >
                           Print
                         </button>
-                        {userRole !== 'parent' && (
+                        {userRole === 'admin' && (
                           <button
                             className="btn danger"
                             style={{ padding: '4px 8px', fontSize: '12px' }}
