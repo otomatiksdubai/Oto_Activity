@@ -83,10 +83,10 @@ export default function Dashboard({ user }) {
       const promises = [
         studentAPI.getAll(),
         sessionAPI.getAll(),
-        feesAPI.getAll(),
+        user.role === 'parent' ? Promise.resolve({ data: [] }) : feesAPI.getAll(),
         attendanceAPI.getAll(),
-        reportAPI.getSales('daily'),
-        reportAPI.getSales('monthly')
+        (user.role === 'admin' || user.role === 'staff') ? reportAPI.getSales('daily') : Promise.resolve({ data: {} }),
+        (user.role === 'admin' || user.role === 'staff') ? reportAPI.getSales('monthly') : Promise.resolve({ data: {} })
       ];
 
       const results = await Promise.all(promises);
@@ -97,13 +97,13 @@ export default function Dashboard({ user }) {
       const dailyRes = results[4];
       const monthlyRes = results[5];
 
-        const unpaid = feesRes.data.filter(f => f.status === 'unpaid' || f.status === 'pending').length;
-        const partial = feesRes.data.filter(f => f.status === 'partial').length;
+        const unpaid = feesRes.data ? feesRes.data.filter(f => f.status === 'unpaid' || f.status === 'pending').length : 0;
+        const partial = feesRes.data ? feesRes.data.filter(f => f.status === 'partial').length : 0;
 
-        // Filter sessions for today
+        // Filter sessions (Today only for Admin/Staff/Trainer, All for Parent)
         const todayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-        const filteredToday = sessionsRes.data.filter(s => s.day === todayName);
-        setTodaySessions(filteredToday);
+        const filteredSessions = user.role === 'parent' ? sessionsRes.data : sessionsRes.data.filter(s => s.day === todayName);
+        setTodaySessions(filteredSessions);
         setTodayAttendance(attendanceRes.data || []);
 
         let totalHours = 0;
@@ -112,7 +112,7 @@ export default function Dashboard({ user }) {
         if (user.role === 'parent') {
           sessionsRes.data.forEach(s => {
             totalHours += (s.totalHours || 0);
-            remainingHours += (s.remainingHours || 0);
+            remainingHours += (s.remainingHours || (s.totalHours || 0));
           });
           setAttendanceHistory(attendanceRes.data || []);
         }
@@ -219,50 +219,52 @@ export default function Dashboard({ user }) {
         </div>
       )}
 
-      {user.role !== 'parent' && (
-        <div style={{ marginTop: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <h2 style={{ margin: 0 }}>Today's Schedule ({new Date().toLocaleDateString('en-US', { weekday: 'long' })})</h2>
-          </div>
-          <div className="scroll-table-container">
-            <table>
-              <thead>
+      <div style={{ marginTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <h2 style={{ margin: 0 }}>
+            {user.role === 'parent' ? "My Children's Schedule" : `Today's Schedule (${new Date().toLocaleDateString('en-US', { weekday: 'long' })})`}
+          </h2>
+        </div>
+        <div className="scroll-table-container">
+          <table>
+            <thead>
+              <tr>
+                <th onClick={() => requestScheduleSort('time')} style={{cursor: 'pointer'}}>Time {scheduleSort.key === 'time' ? (scheduleSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
+                <th onClick={() => requestScheduleSort('student')} style={{cursor: 'pointer'}}>Student {scheduleSort.key === 'student' ? (scheduleSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
+                <th>Program</th>
+                {user.role !== 'parent' && <th>Room</th>}
+                <th>Trainer</th>
+                <th>Status</th>
+                {user.role !== 'parent' && <th>Action</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {todaySessions.length === 0 ? (
                 <tr>
-                  <th onClick={() => requestScheduleSort('time')} style={{cursor: 'pointer'}}>Time {scheduleSort.key === 'time' ? (scheduleSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
-                  <th onClick={() => requestScheduleSort('student')} style={{cursor: 'pointer'}}>Student {scheduleSort.key === 'student' ? (scheduleSort.direction === 'asc' ? '↑' : '↓') : ''}</th>
-                  <th>Program</th>
-                  <th>Room</th>
-                  <th>Trainer</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <td colSpan={user.role === 'parent' ? "5" : "7"} style={{ textAlign: 'center' }} className="muted">No sessions scheduled for today</td>
                 </tr>
-              </thead>
-              <tbody>
-                {todaySessions.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" style={{ textAlign: 'center' }} className="muted">No sessions scheduled for today</td>
-                  </tr>
-                ) : (
-                  sortedSessions.map(session => {
-                    const past = isPast(session.time);
-                    const status = getStatus(session._id, session.student?._id);
-                    return (
-                      <tr key={session._id} style={{ opacity: past ? 0.5 : 1, transition: 'opacity 0.3s' }}>
-                        <td><strong style={{ color: past ? '#888' : 'inherit' }}>{session.time}</strong></td>
-                        <td>{session.student?.name || 'N/A'}</td>
-                        <td>{session.program}</td>
-                        <td>{session.room}</td>
-                        <td>{session.trainer?.name || 'Assigned'}</td>
+              ) : (
+                sortedSessions.map(session => {
+                  const past = isPast(session.time);
+                  const status = getStatus(session._id, session.student?._id);
+                  return (
+                    <tr key={session._id} style={{ opacity: past ? 0.7 : 1, transition: 'opacity 0.3s' }}>
+                      <td><strong style={{ color: past ? '#888' : 'inherit' }}>{session.time}</strong></td>
+                      <td>{session.student?.name || 'N/A'}</td>
+                      <td>{session.program}</td>
+                      {user.role !== 'parent' && <td>{session.room}</td>}
+                      <td>{session.trainer?.name || 'Assigned'}</td>
+                      <td>
+                        {status ? (
+                          <span className={`badge ${status === 'present' ? 'green' : 'red'}`} style={{ fontSize: '10px' }}>
+                            {status.toUpperCase()}
+                          </span>
+                        ) : (
+                          <span className="muted" style={{ fontSize: '10px' }}>{past ? 'NO RECORD' : 'UPCOMING'}</span>
+                        )}
+                      </td>
+                      {user.role !== 'parent' && (
                         <td>
-                          {status ? (
-                            <span className={`badge ${status === 'present' ? 'green' : 'red'}`} style={{ fontSize: '10px' }}>
-                              {status.toUpperCase()}
-                            </span>
-                          ) : (
-                            <span className="muted" style={{ fontSize: '10px' }}>PENDING</span>
-                          )}
-                        </td>
-                         <td>
                           {(user.role === 'admin' || user.role === 'trainer') ? (
                             <button 
                               className="btn ghost" 
@@ -275,16 +277,16 @@ export default function Dashboard({ user }) {
                             <span className="muted" style={{fontSize: '11px'}}>{status ? 'Marked' : 'Not Marked'}</span>
                           )}
                         </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-          <hr style={{ margin: '30px 0' }} />
+                      )}
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+        <hr style={{ margin: '30px 0' }} />
+      </div>
 
       <MarkAttendanceModal 
         isOpen={showMarkModal}

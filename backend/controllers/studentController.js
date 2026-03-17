@@ -83,11 +83,26 @@ exports.createStudent = async (req, res) => {
 
 exports.updateStudent = async (req, res) => {
   try {
+    const oldStudent = await Student.findById(req.params.id);
     const student = await Student.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
+
+    // If name changed, update the parent user account username to keep login in sync
+    if (oldStudent && req.body.name && oldStudent.name !== oldStudent.name) {
+       // Wait, req.body.name vs oldStudent.name comparison
+    }
+    
+    if (oldStudent && req.body.name && oldStudent.name !== req.body.name) {
+      const User = require('../models/User');
+      await User.findOneAndUpdate(
+        { username: oldStudent.name, role: 'parent' },
+        { username: req.body.name }
+      );
+    }
+    
     res.json(student);
   } catch (error) {
     res.status(500).json({ message: 'Error updating student', error: error.message });

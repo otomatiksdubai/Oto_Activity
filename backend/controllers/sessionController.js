@@ -5,11 +5,11 @@ exports.getAllSessions = async (req, res) => {
   try {
     let query = {};
 
-    // If Parent, filter by student
+    // If Parent, filter by student(s) matching their username (case-insensitive)
     if (req.role === 'parent') {
-      const student = await Student.findOne({ name: req.username });
-      if (student) {
-        query = { student: student._id };
+      const parentStudents = await Student.find({ name: new RegExp(`^${req.username}$`, 'i') });
+      if (parentStudents.length > 0) {
+        query = { student: { $in: parentStudents.map(s => s._id) } };
       } else {
         return res.json([]);
       }

@@ -5,20 +5,18 @@ exports.getAllFees = async (req, res) => {
   try {
     let query = {};
 
-    // If Parent, filter by student name
+    // If Parent, filter by student(s) matching their username (case-insensitive)
     if (req.role === 'parent') {
-      const student = await Student.findOne({ name: req.username });
-      if (student) {
-        query = {
-          $or: [
-            { student: student._id },
-            { studentName: student.name }
-          ]
-        };
-      } else {
-        // Find by name if student object doesn't exist for some reason
-        query = { studentName: req.username };
-      }
+      const parentStudents = await Student.find({ name: new RegExp(`^${req.username}$`, 'i') });
+      const parentStudentIds = parentStudents.map(s => s._id);
+      const parentStudentNames = parentStudents.map(s => s.name);
+      
+      query = {
+        $or: [
+          { student: { $in: parentStudentIds } },
+          { studentName: { $in: parentStudentNames } }
+        ]
+      };
     }
 
     const fees = await Fee.find(query)
