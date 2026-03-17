@@ -235,7 +235,7 @@ export default function Fees() {
                placeholder="Search..." 
                value={searchTerm}
                onChange={(e) => setSearchTerm(e.target.value)}
-               style={{ padding: '8px 12px 8px 35px', borderRadius: '20px', border: '1px solid var(--border)', background: 'var(--card-bg) url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>\') no-repeat 12px center' }}
+                style={{ padding: '8px 12px 8px 35px', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.1)', background: 'var(--card-bg) url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>\') no-repeat 12px center', fontSize: '13px' }}
              />
           </div>
         </div>
