@@ -15,7 +15,8 @@ export default function Sessions() {
     time: '10:00 AM',
     trainerId: '',
     duration: '1 Hour',
-    totalHours: ''
+    totalHours: '',
+    initialUsedHours: 0
   });
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +93,8 @@ export default function Sessions() {
         time: '10:00 AM',
         trainerId: '',
         duration: '1 Hour',
-        totalHours: ''
+        totalHours: '',
+        initialUsedHours: 0
       });
       fetchData();
       alert('Session created successfully!');
@@ -249,6 +251,16 @@ export default function Sessions() {
                   onChange={(e) => setFormData({ ...formData, totalHours: e.target.value })}
                   placeholder="e.g., 10"
                   min="1"
+                />
+              </div>
+              <div className="field">
+                <label>Hours Already Used</label>
+                <input
+                  type="number"
+                  value={formData.initialUsedHours}
+                  onChange={(e) => setFormData({ ...formData, initialUsedHours: e.target.value })}
+                  placeholder="0"
+                  min="0"
                 />
               </div>
             </div>
