@@ -63,7 +63,9 @@ exports.getSessionById = async (req, res) => {
 
 exports.createSession = async (req, res) => {
   try {
-    const { studentId, program, room, day, time, trainerId, duration, totalHours } = req.body;
+    const { studentId, program, room, day, time, trainerId, duration, totalHours, initialUsedHours } = req.body;
+    const used = parseInt(initialUsedHours, 10) || 0;
+    const total = parseInt(totalHours, 10) || 0;
 
     const session = new Session({
       student: studentId,
@@ -73,8 +75,8 @@ exports.createSession = async (req, res) => {
       time,
       trainer: trainerId,
       duration,
-      totalHours,
-      remainingHours: totalHours
+      totalHours: total,
+      remainingHours: Math.max(0, total - used)
     });
 
     await session.save();
