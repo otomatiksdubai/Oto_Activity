@@ -7,15 +7,15 @@ const {
   updateAttendance,
   deleteAttendance
 } = require('../controllers/attendanceController');
-const { authMiddleware } = require('../middleware/auth');
+const { authMiddleware, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
 router.get('/', authMiddleware, getAllAttendance);
 router.get('/session/:sessionId', authMiddleware, getAttendanceBySession);
 router.get('/student/:studentId', authMiddleware, getAttendanceByStudent);
-router.post('/mark', authMiddleware, markAttendance);
-router.put('/:id', authMiddleware, updateAttendance);
-router.delete('/:id', authMiddleware, deleteAttendance);
+router.post('/mark', authMiddleware, requireRole('admin', 'trainer'), markAttendance);
+router.put('/:id', authMiddleware, requireRole('admin', 'trainer'), updateAttendance);
+router.delete('/:id', authMiddleware, requireRole('admin', 'trainer'), deleteAttendance);
 
 module.exports = router;

@@ -120,9 +120,9 @@ export default function Sessions() {
   return (
     <>
       <h1>Sessions</h1>
-      <p className="muted">Admin/Staff can create sessions. Trainer sees their own sessions.</p>
+      <p className="muted">Admin and Trainers can create and manage sessions. Staff can monitor all session listings.</p>
 
-      {userRole !== 'parent' && (
+      {(userRole === 'admin' || userRole === 'trainer') && (
         <div id="sessionForm" className="no-print">
           <h2>Create Session</h2>
           <form onSubmit={handleAddSession}>

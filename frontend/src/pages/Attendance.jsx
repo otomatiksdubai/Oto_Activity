@@ -160,7 +160,7 @@ export default function Attendance() {
         </div>
       </div>
 
-      {userRole !== 'parent' && (
+      {(userRole === 'admin' || userRole === 'trainer') && (
         <div id="markBox" style={{ marginTop: '10px' }}>
           <h2>Mark Attendance</h2>
           <div className="row">

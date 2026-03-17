@@ -200,7 +200,7 @@ export default function Dashboard({ user }) {
             <div className="muted">Partial Fees</div>
             <div className="num">{stats.partialFees}</div>
           </div>
-          {user.role === 'admin' && (
+          {(user.role === 'admin' || user.role === 'staff') && (
             <>
               <div className="box" style={{ borderColor: 'var(--ok)' }}>
                 <div className="muted">Today's Sales</div>
@@ -262,14 +262,18 @@ export default function Dashboard({ user }) {
                             <span className="muted" style={{ fontSize: '10px' }}>PENDING</span>
                           )}
                         </td>
-                        <td>
-                          <button 
-                            className="btn ghost" 
-                            style={{ padding: '4px 8px', fontSize: '11px' }}
-                            onClick={() => handleMarkClick(session)}
-                          >
-                            {status ? 'Edit' : 'Mark'}
-                          </button>
+                         <td>
+                          {(user.role === 'admin' || user.role === 'trainer') ? (
+                            <button 
+                              className="btn ghost" 
+                              style={{ padding: '4px 8px', fontSize: '11px' }}
+                              onClick={() => handleMarkClick(session)}
+                            >
+                              {status ? 'Edit' : 'Mark'}
+                            </button>
+                          ) : (
+                            <span className="muted" style={{fontSize: '11px'}}>{status ? 'Marked' : 'Not Marked'}</span>
+                          )}
                         </td>
                       </tr>
                     );

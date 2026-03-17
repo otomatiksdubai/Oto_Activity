@@ -8,6 +8,7 @@ export default function Reports() {
   const [period, setPeriod] = useState('daily');
   const [detailsSort, setDetailsSort] = useState({ key: 'date', direction: 'desc' });
   const [historySort, setHistorySort] = useState({ key: 'createdAt', direction: 'desc' });
+  const [userRole, setUserRole] = useState('');
 
   const escapeCSV = (str) => {
     if (str === null || str === undefined) return '';
@@ -62,6 +63,8 @@ export default function Reports() {
   }, [history, historySort]);
 
   useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    setUserRole(userData.role || '');
     fetchHistory();
     fetchSales('daily');
   }, []);
@@ -113,14 +116,16 @@ export default function Reports() {
     link.click();
     document.body.removeChild(link);
     
-    // Save to history
-    reportAPI.save({
-      title: `${title} - ${new Date().toLocaleDateString()}`,
-      type: period,
-      dateRange: { start: data.start, end: data.end },
-      totalAmount: data.totalCollections,
-      data: data.reportData
-    }).then(() => fetchHistory());
+    // Save to history - only for Admins
+    if (userRole === 'admin') {
+      reportAPI.save({
+        title: `${title} - ${new Date().toLocaleDateString()}`,
+        type: period,
+        dateRange: { start: data.start, end: data.end },
+        totalAmount: data.totalCollections,
+        data: data.reportData
+      }).then(() => fetchHistory()).catch(err => console.error("History save failed:", err));
+    }
   };
 
   return (
