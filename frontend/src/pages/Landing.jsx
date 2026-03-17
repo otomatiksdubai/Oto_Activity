@@ -50,6 +50,58 @@ function FAQItem({ q, a }) {
 export default function Landing() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showOfferPopup, setShowOfferPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [offerForm, setOfferForm] = useState({
+    parentName: '',
+    contact: '',
+    email: '',
+    studentName: '',
+    studentClass: ''
+  });
+
+  // Offer Popup timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const hasSeenOffer = sessionStorage.getItem('hasSeenOffer');
+      if (!hasSeenOffer) {
+        setShowOfferPopup(true);
+        sessionStorage.setItem('hasSeenOffer', 'true');
+      }
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleOfferSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const { parentName, contact, email, studentName, studentClass } = offerForm;
+    
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxC1c5hVvS9pKCiRyxlV3t54tJUVU6tmakJBegdk9oVy2yro9V71YVuBxqg1KjF6ffitA/exec';
+    
+    // Use URLSearchParams for POST (best for GAS compatibility with e.parameter)
+    const params = new URLSearchParams();
+    params.append('parentName', parentName);
+    params.append('contact', contact);
+    params.append('email', email);
+    params.append('studentName', studentName);
+    params.append('studentClass', studentClass);
+    
+    try {
+      await fetch(scriptURL, { 
+        method: 'POST',
+        body: params,
+        mode: 'no-cors' // Required for Google Apps Script
+      });
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Submission error:', error);
+      alert('Something went wrong. Please try again or contact us via WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Scroll reveal
   useEffect(() => {
@@ -485,6 +537,185 @@ export default function Landing() {
           <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.7 17.7 69.4 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.1 0-65.6-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.4-8.6-44.6-27.6-16.5-14.7-27.6-32.8-30.8-38.4-3.2-5.6-.3-8.6 2.5-11.4 2.5-2.5 5.5-6.5 8.3-9.7 2.8-3.2 3.7-5.5 5.5-9.2 1.9-3.7 1-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
         </svg>
       </a>
+
+      {/* ── 30% Offer Popup ── */}
+      {showOfferPopup && (
+        <div className="offer-overlay">
+          <div className="offer-modal reveal-visible">
+            <button className="offer-close" onClick={() => setShowOfferPopup(false)}>&times;</button>
+            <div className="offer-content">
+              <div className="offer-badge">LIMITED TIME OFFER</div>
+              <h2 className="offer-title">Grab <span>30% OFF</span></h2>
+              <p className="offer-subtitle">Enroll now for Robotics classes and give your kids the future they deserve!</p>
+              
+              {isSubmitted ? (
+                <div className="offer-success-state">
+                  <div className="success-icon-badge">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <h3 className="offer-title" style={{fontSize: '28px', marginTop: '20px'}}>Offer <span>Grabbed!</span></h3>
+                  <p className="offer-subtitle">Excellent choice! We have received your details and our team will contact you via WhatsApp shortly to finalize your 30% discount.</p>
+                  <button className="offer-submit-btn" style={{width: '100%'}} onClick={() => setShowOfferPopup(false)}>
+                    Close Window
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleOfferSubmit} className="offer-form">
+                  <input 
+                    type="text" 
+                    placeholder="Parent Name" 
+                    required 
+                    value={offerForm.parentName}
+                    onChange={(e) => setOfferForm({...offerForm, parentName: e.target.value})}
+                  />
+                  <input 
+                    type="tel" 
+                    placeholder="Contact Number" 
+                    required 
+                    value={offerForm.contact}
+                    onChange={(e) => setOfferForm({...offerForm, contact: e.target.value})}
+                  />
+                  <input 
+                    type="email" 
+                    placeholder="Email ID" 
+                    required 
+                    value={offerForm.email}
+                    onChange={(e) => setOfferForm({...offerForm, email: e.target.value})}
+                  />
+                  <div className="form-row">
+                    <input 
+                      type="text" 
+                      placeholder="Student Name" 
+                      required 
+                      value={offerForm.studentName}
+                      onChange={(e) => setOfferForm({...offerForm, studentName: e.target.value})}
+                    />
+                    <input 
+                      type="text" 
+                      placeholder="Grade/Class" 
+                      required 
+                      value={offerForm.studentClass}
+                      onChange={(e) => setOfferForm({...offerForm, studentClass: e.target.value})}
+                    />
+                  </div>
+                  <button type="submit" className="offer-submit-btn" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending...' : 'Claim My 30% Discount'}
+                    {!isSubmitting && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{marginLeft: '10px'}}><path d="M5 12h14m-7-7 7 7-7 7"/></svg>}
+                  </button>
+                </form>
+              )}
+              {!isSubmitted && <p className="offer-footer">We'll contact you via WhatsApp to finalize your discount!</p>}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .success-icon-badge {
+          width: 80px; height: 80px;
+          background: rgba(61, 220, 151, 0.1);
+          color: #3ddc97;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto;
+          animation: success-pulse 2s infinite;
+        }
+        @keyframes success-pulse {
+          0% { box-shadow: 0 0 0 0 rgba(61, 220, 151, 0.4); }
+          70% { box-shadow: 0 0 0 20px rgba(61, 220, 151, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(61, 220, 151, 0); }
+        }
+        .offer-overlay {
+          position: fixed;
+          top: 0; left: 0; width: 100%; height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          backdrop-filter: blur(8px);
+          z-index: 2000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+        .offer-modal {
+          background: #fff;
+          width: 100%;
+          max-width: 500px;
+          border-radius: 32px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+          animation: modal-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modal-pop {
+          0% { transform: scale(0.9); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .offer-close {
+          position: absolute;
+          top: 20px; right: 20px;
+          background: rgba(0,0,0,0.05);
+          border: none;
+          width: 36px; height: 36px;
+          border-radius: 50%;
+          font-size: 24px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .offer-close:hover { background: rgba(0,0,0,0.1); transform: rotate(90deg); }
+        .offer-content { padding: 40px; text-align: center; }
+        .offer-badge {
+          display: inline-block;
+          background: rgba(255, 64, 129, 0.1);
+          color: var(--accent-pink);
+          padding: 6px 16px;
+          border-radius: 99px;
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 1px;
+          margin-bottom: 16px;
+        }
+        .offer-title { font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
+        .offer-title span { color: var(--accent2); }
+        .offer-subtitle { color: var(--muted); font-size: 16px; margin-bottom: 30px; line-height: 1.5; }
+        
+        .offer-form { display: flex; flex-direction: column; gap: 12px; }
+        .offer-form input {
+          width: 100%;
+          padding: 14px 20px;
+          border-radius: 12px;
+          border: 1px solid rgba(0,0,0,0.1);
+          font-size: 15px;
+          transition: all 0.2s;
+        }
+        .offer-form input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px rgba(26, 86, 178, 0.1); }
+        .form-row { display: flex; gap: 12px; }
+        .offer-submit-btn {
+          margin-top: 10px;
+          background: var(--accent);
+          color: #fff;
+          padding: 16px;
+          border-radius: 12px;
+          border: none;
+          font-size: 16px;
+          font-weight: 700;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+          box-shadow: 0 4px 12px rgba(26, 86, 178, 0.3);
+        }
+        .offer-submit-btn:hover { background: #1e6dcf; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(26, 86, 178, 0.4); }
+        .offer-footer { font-size: 12px; color: var(--muted); margin-top: 20px; }
+        
+        @media (max-width: 480px) {
+          .offer-content { padding: 30px 20px; }
+          .offer-title { font-size: 28px; }
+          .form-row { flex-direction: column; }
+        }
+      `}} />
     </div>
   );
 }
