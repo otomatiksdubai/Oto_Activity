@@ -60,12 +60,12 @@ const CustomCursor = () => {
                     position: fixed;
                     width: 8px;
                     height: 8px;
-                    background-color: white;
+                    background-color: var(--accent);
                     border-radius: 50%;
                     pointer-events: none;
                     z-index: 99999;
                     transform: translate(-50%, -50%);
-                    box-shadow: 0 0 12px var(--accent);
+                    box-shadow: 0 0 10px white;
                     transition: width 0.3s, height 0.3s, background-color 0.3s;
                 }
 
@@ -73,28 +73,28 @@ const CustomCursor = () => {
                     position: fixed;
                     width: 40px;
                     height: 40px;
-                    border: 1.5px solid white;
-                    background-color: rgba(26, 86, 178, 0.05); /* Very light blue tint */
+                    border: 1.5px solid var(--accent);
+                    background-color: rgba(255, 255, 255, 0.1);
                     border-radius: 50%;
                     pointer-events: none;
                     z-index: 99998;
                     transform: translate(-50%, -50%);
-                    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5), inset 0 0 8px rgba(26, 86, 178, 0.1);
+                    box-shadow: 0 0 8px rgba(26, 86, 178, 0.2), inset 0 0 8px rgba(255, 255, 255, 0.2);
                     transition: width 0.4s, height 0.4s, border-color 0.3s, opacity 0.3s, transform 0.2s ease-out;
                 }
 
                 .custom-cursor-dot.hover {
                     width: 12px;
                     height: 12px;
-                    background-color: var(--accent);
-                    box-shadow: 0 0 15px white;
+                    background-color: white;
+                    box-shadow: 0 0 15px var(--accent);
                 }
 
                 .custom-cursor-outline.hover {
                     width: 60px;
                     height: 60px;
-                    border-color: var(--accent);
-                    background-color: rgba(255, 255, 255, 0.1);
+                    border-color: white;
+                    background-color: rgba(26, 86, 178, 0.2);
                     opacity: 0.9;
                 }
 

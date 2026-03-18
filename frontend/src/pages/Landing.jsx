@@ -53,6 +53,7 @@ export default function Landing() {
   const [showOfferPopup, setShowOfferPopup] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [offerForm, setOfferForm] = useState({
     parentName: '',
     contact: '',
@@ -60,6 +61,16 @@ export default function Landing() {
     studentName: '',
     studentClass: ''
   });
+
+  // Nav Scroll behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Offer Popup timer
   useEffect(() => {
@@ -77,9 +88,9 @@ export default function Landing() {
     e.preventDefault();
     setIsSubmitting(true);
     const { parentName, contact, email, studentName, studentClass } = offerForm;
-    
+
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxC1c5hVvS9pKCiRyxlV3t54tJUVU6tmakJBegdk9oVy2yro9V71YVuBxqg1KjF6ffitA/exec';
-    
+
     // Use URLSearchParams for POST (best for GAS compatibility with e.parameter)
     const params = new URLSearchParams();
     params.append('parentName', parentName);
@@ -87,9 +98,9 @@ export default function Landing() {
     params.append('email', email);
     params.append('studentName', studentName);
     params.append('studentClass', studentClass);
-    
+
     try {
-      await fetch(scriptURL, { 
+      await fetch(scriptURL, {
         method: 'POST',
         body: params,
         mode: 'no-cors' // Required for Google Apps Script
@@ -124,11 +135,30 @@ export default function Landing() {
   ];
 
   const testimonials = [
-    { name: 'Sara Al Mansouri', role: 'Parent of Antony, 9', text: 'My son came home every day excited. The trainers are patient and incredibly skilled. Best investment we made!' },
-    { name: 'James Fernandez', role: 'Parent of Lily, 11', text: 'Lily built her first robot in month 2. The progress is incredible and the small batch size really makes a difference.' },
-    { name: 'Fatima Al Rashidi', role: 'Parent of Omar, 7', text: 'I love how they mix screen-free robotics with coding. Omar has become so focused and creative since joining.' },
-    { name: 'Raj Patel', role: 'Parent of Arya, 13', text: 'Arya\'s Python skills jumped significantly. The Arduino AI course is genuinely advanced. Highly recommended!' },
+    { name: 'Rashmi Chauhan', role: 'Parent of Khyaati', text: 'My daughter is enjoying her robotics class. One thing I like most is that they focus on practical learning along with the theory portion. She is able to visualize everything she is learning. The teachers are very supportive.' },
+    { name: 'Rashmi Karkera', role: 'Parent', text: 'My Son enjoys coming for his Robotics classes every week. He always shares with us what he did in class and tries to apply what he learnt in lessons in daily life. The instructors are amazing.' },
+    { name: 'Halima Sadiya', role: 'Level 5 Student', text: 'I’ve had a great experience at Otomatiks Training Center. I’m currently in Level 5 robotics, and the teachers and staff are very supportive and encouraging. The hands-on learning makes the classes enjoyable.' },
+    { name: 'Najla Salahuddin', role: 'Parent of Zidan', text: 'My son absolutely loves his robotics classes at Otomatiks! Since moving from India, this has been a place where he’s not only developed a strong interest in robotics but also found a space to be himself and make new friends.' },
+    { name: 'Tarun Malik', role: 'Parent', text: 'My son loves Otomatiks robotics classes. He likes to get the basics taught with real-time examples and experiments. Otomatiks standouts due to the fact they teach robotics from base and answer lot of why\'s very well.' },
+    { name: 'Joshini Reddy', role: 'Parent', text: 'Otomatiks is the best place if you want your kids to learn the niche skills in today\'s competitive world. They have a well structured curriculum and well trained instructors.' },
+    { name: 'Rinky Singhania', role: 'Parent', text: 'Enrolled my daughter and very happy with overall experience. The trainers and management take real efforts to engage the kid and take the parents through the process end to end.' },
+    { name: 'Anil Noairs', role: 'Local Guide', text: 'Impressed with what Otomatiks have achieved so far in its short tenure. Iam sure the kids are much enriched in their pursuit of Robotics and STEM knowledge. Dubai is truly blessed to have you.' },
+    { name: 'Ruba Hmeedat', role: 'Parent', text: 'I’m a grateful for the time my son spent to learn in Otomatiks Training center. He improves his skills. The team is very kind, the place is very nice.' },
+    { name: 'Preeti Aswani', role: 'Parent of Aryan, 9', text: 'Really fun class. I rate it 15,000 stars. Aryan loves it!' }
   ];
+
+  const [currentIndex, setCurrentIndex] = useState(testimonials.length * 25); // Start in the middle of 50 sets
+
+  // Auto-slide testimonials infinitely
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex(p => p + 1);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
+
+  // Generate a large array to simulate an infinite loop effortlessly
+  const repeatedTestimonials = Array(50).fill(testimonials).flat();
 
   const faqs = [
     { q: 'What age groups do you cater to?', a: 'We welcome students from age 5 to 17. Programs are carefully grouped by age and skill level for the best learning experience.' },
@@ -139,33 +169,33 @@ export default function Landing() {
   ];
 
   const timeline = [
-    { 
-      age: 'Ages 5–8', 
-      kit: 'LEGO WeDo 2.0', 
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>, 
-      color: '#ff8a65', 
-      desc: 'Basics of mechanics, gears & sensors with fun drag-and-drop controls.' 
+    {
+      age: 'Ages 5–8',
+      kit: 'LEGO WeDo 2.0',
+      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>,
+      color: '#ff8a65',
+      desc: 'Basics of mechanics, gears & sensors with fun drag-and-drop controls.'
     },
-    { 
-      age: 'Ages 9–12', 
-      kit: 'Scratch Coding', 
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>, 
-      color: '#42a5f5', 
-      desc: 'Block-based game dev and interactive stories with real programming logic.' 
+    {
+      age: 'Ages 9–12',
+      kit: 'Scratch Coding',
+      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>,
+      color: '#42a5f5',
+      desc: 'Block-based game dev and interactive stories with real programming logic.'
     },
-    { 
-      age: 'Ages 10–13', 
-      kit: 'LEGO Mindstorms', 
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>, 
-      color: '#66bb6a', 
-      desc: 'Advanced robotics with colour, ultrasonic sensors and Python.' 
+    {
+      age: 'Ages 10–13',
+      kit: 'LEGO Mindstorms',
+      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2" /><rect x="9" y="9" width="6" height="6" /><line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" /><line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" /><line x1="20" y1="9" x2="23" y2="9" /><line x1="20" y1="15" x2="23" y2="15" /><line x1="1" y1="9" x2="4" y2="9" /><line x1="1" y1="15" x2="4" y2="15" /></svg>,
+      color: '#66bb6a',
+      desc: 'Advanced robotics with colour, ultrasonic sensors and Python.'
     },
-    { 
-      age: 'Ages 13+', 
-      kit: 'Arduino AI', 
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, 
-      color: '#f0c419', 
-      desc: 'Electronics, C++ and machine-learning concepts on real hardware.' 
+    {
+      age: 'Ages 13+',
+      kit: 'Arduino AI',
+      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>,
+      color: '#f0c419',
+      desc: 'Electronics, C++ and machine-learning concepts on real hardware.'
     },
   ];
 
@@ -173,6 +203,14 @@ export default function Landing() {
 
   return (
     <div className="landing-wrapper">
+      {/* Premium Fluid Mesh Background */}
+      <div className="mesh-bg">
+        <div className="mesh-blob mesh-1"></div>
+        <div className="mesh-blob mesh-2"></div>
+        <div className="mesh-blob mesh-3"></div>
+        <div className="mesh-blob mesh-4"></div>
+      </div>
+
       {/* Background Pattern */}
       <div className="bg-pattern"></div>
 
@@ -180,7 +218,7 @@ export default function Landing() {
       <div className="nav-fade-mask"></div>
 
       {/* ── Navigation ── */}
-      <nav className={`landing-nav ${menuOpen ? 'menu-is-open' : ''}`}>
+      <nav className={`landing-nav ${menuOpen ? 'menu-is-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
         <div className="landing-container">
           <div className="landing-logo-text">
             <img src={logo} alt="Otomatiks" style={{ height: '40px', verticalAlign: 'middle', marginRight: '10px' }} />
@@ -258,28 +296,28 @@ export default function Landing() {
       </div>
 
       {/* ── Features ── */}
-      <section className="landing-section reveal" id="about" style={{ background: '#fcfcfc', paddingTop: '40px' }}>
+      <section className="landing-section reveal" id="about" style={{ paddingTop: '40px' }}>
         <div className="landing-container">
           <span className="section-label">WHAT WE DO</span>
           <h2 className="section-title">At a Glance<span className="dot">.</span></h2>
           <div className="feature-grid">
             <div className="feature-card">
               <span className="feature-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
               </span>
               <h3 className="feature-title">Experience</h3>
               <p className="muted">Hands-on learning with world-class robotics kits and expert mentors.</p>
             </div>
             <div className="feature-card">
               <span className="feature-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.9 2.33 2.33 2.33-5.24 5.24-2.33-2.33z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0a2.12 2.12 0 0 1 0-3L12 9" /><path d="M17.64 15 22 10.64" /><path d="m20.9 2.33 2.33 2.33-5.24 5.24-2.33-2.33z" /></svg>
               </span>
               <h3 className="feature-title">Practice</h3>
               <p className="muted">Learning by doing. Building real models that solve real-world problems.</p>
             </div>
             <div className="feature-card">
               <span className="feature-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c0 2 2 3 6 3s6-1 6-3v-5" /></svg>
               </span>
               <h3 className="feature-title">Skills</h3>
               <p className="muted">Developing 21st-century skills: Coding, Logic, and Engineering.</p>
@@ -296,7 +334,7 @@ export default function Landing() {
       </section>
 
       {/* ── 6. Course Timeline ── */}
-      <section className="landing-section reveal" style={{ background: '#fcfcfc' }}>
+      <section className="landing-section reveal">
         <div className="landing-container">
           <span className="section-label">LEARNING PATH</span>
           <h2 className="section-title">Your Child's Journey<span className="dot">.</span></h2>
@@ -317,7 +355,7 @@ export default function Landing() {
       </section>
 
       {/* ── Programs ── */}
-      <section className="landing-section reveal" id="programs" style={{ background: '#fcfcfc' }}>
+      <section className="landing-section reveal" id="programs">
         <div className="landing-container">
           <span className="section-label">OUR PROGRAMS</span>
           <h2 className="section-title">Explore Robotics<span className="dot">.</span></h2>
@@ -381,25 +419,53 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 3. Testimonials ── */}
       <section className="landing-section reveal" id="testimonials">
         <div className="landing-container">
           <span className="section-label">WHAT PARENTS SAY</span>
           <h2 className="section-title">Real Stories<span className="dot">.</span></h2>
-          <div className="testimonials-grid">
-            {testimonials.map((t, i) => (
-              <div className="testimonial-card" key={i}>
-                <div className="testimonial-stars">★★★★★</div>
-                <p className="testimonial-text">"{t.text}"</p>
-                <div className="testimonial-author">
-                  <div className="testimonial-avatar">{t.name[0]}</div>
-                  <div>
-                    <div className="testimonial-name">{t.name}</div>
-                    <div className="testimonial-role muted small">{t.role}</div>
+          <div className="testimonials-wrap-outer" style={{ '--active-index': currentIndex }}>
+            <div className="testimonials-track">
+              {repeatedTestimonials.map((t, i) => {
+                const isActive = i === currentIndex;
+                return (
+                  <div 
+                    className={`testimonial-card-v2 ${isActive ? 'active' : ''}`} 
+                    key={i} 
+                    onClick={() => setCurrentIndex(i)}
+                  >
+                    <div className="testimonial-stars">★★★★★</div>
+                    <p className="testimonial-text">"{t.text}"</p>
+                    <div className="testimonial-author">
+                      <div className="testimonial-avatar">{t.name[0]}</div>
+                      <div>
+                        <div className="testimonial-name">{t.name}</div>
+                        <div className="testimonial-role muted small">{t.role}</div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                );
+              })}
+            </div>
+            
+            <div className="testimonial-dots">
+              {testimonials.map((_, i) => {
+                const isDotActive = i === currentIndex % testimonials.length;
+                return (
+                  <span 
+                    key={i} 
+                    className={`test-dot ${isDotActive ? 'active' : ''}`} 
+                    onClick={() => {
+                      const currentMod = currentIndex % testimonials.length;
+                      let diff = i - currentMod;
+                      // Jump in the shortest direction
+                      if (diff > testimonials.length / 2) diff -= testimonials.length;
+                      if (diff < -testimonials.length / 2) diff += testimonials.length;
+                      setCurrentIndex(currentIndex + diff);
+                    }}
+                  ></span>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -553,60 +619,60 @@ export default function Landing() {
               <div className="offer-badge">LIMITED TIME OFFER</div>
               <h2 className="offer-title">Grab <span>30% OFF</span></h2>
               <p className="offer-subtitle">Enroll now for Robotics classes and give your kids the future they deserve!</p>
-              
+
               {isSubmitted ? (
                 <div className="offer-success-state">
                   <div className="success-icon-badge">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                   </div>
-                  <h3 className="offer-title" style={{fontSize: '28px', marginTop: '20px'}}>Offer <span>Grabbed!</span></h3>
+                  <h3 className="offer-title" style={{ fontSize: '28px', marginTop: '20px' }}>Offer <span>Grabbed!</span></h3>
                   <p className="offer-subtitle">Excellent choice! We have received your details and our team will contact you via WhatsApp shortly to finalize your 30% discount.</p>
-                  <button className="offer-submit-btn" style={{width: '100%'}} onClick={() => setShowOfferPopup(false)}>
+                  <button className="offer-submit-btn" style={{ width: '100%' }} onClick={() => setShowOfferPopup(false)}>
                     Close Window
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleOfferSubmit} className="offer-form">
-                  <input 
-                    type="text" 
-                    placeholder="Parent Name" 
-                    required 
+                  <input
+                    type="text"
+                    placeholder="Parent Name"
+                    required
                     value={offerForm.parentName}
-                    onChange={(e) => setOfferForm({...offerForm, parentName: e.target.value})}
+                    onChange={(e) => setOfferForm({ ...offerForm, parentName: e.target.value })}
                   />
-                  <input 
-                    type="tel" 
-                    placeholder="Contact Number" 
-                    required 
+                  <input
+                    type="tel"
+                    placeholder="Contact Number"
+                    required
                     value={offerForm.contact}
-                    onChange={(e) => setOfferForm({...offerForm, contact: e.target.value})}
+                    onChange={(e) => setOfferForm({ ...offerForm, contact: e.target.value })}
                   />
-                  <input 
-                    type="email" 
-                    placeholder="Email ID" 
-                    required 
+                  <input
+                    type="email"
+                    placeholder="Email ID"
+                    required
                     value={offerForm.email}
-                    onChange={(e) => setOfferForm({...offerForm, email: e.target.value})}
+                    onChange={(e) => setOfferForm({ ...offerForm, email: e.target.value })}
                   />
                   <div className="form-row">
-                    <input 
-                      type="text" 
-                      placeholder="Student Name" 
-                      required 
+                    <input
+                      type="text"
+                      placeholder="Student Name"
+                      required
                       value={offerForm.studentName}
-                      onChange={(e) => setOfferForm({...offerForm, studentName: e.target.value})}
+                      onChange={(e) => setOfferForm({ ...offerForm, studentName: e.target.value })}
                     />
-                    <input 
-                      type="text" 
-                      placeholder="Grade/Class" 
-                      required 
+                    <input
+                      type="text"
+                      placeholder="Grade/Class"
+                      required
                       value={offerForm.studentClass}
-                      onChange={(e) => setOfferForm({...offerForm, studentClass: e.target.value})}
+                      onChange={(e) => setOfferForm({ ...offerForm, studentClass: e.target.value })}
                     />
                   </div>
                   <button type="submit" className="offer-submit-btn" disabled={isSubmitting}>
                     {isSubmitting ? 'Sending...' : 'Claim My 30% Discount'}
-                    {!isSubmitting && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{marginLeft: '10px'}}><path d="M5 12h14m-7-7 7 7-7 7"/></svg>}
+                    {!isSubmitting && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginLeft: '10px' }}><path d="M5 12h14m-7-7 7 7-7 7" /></svg>}
                   </button>
                 </form>
               )}
@@ -616,7 +682,8 @@ export default function Landing() {
         </div>
       )}
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .success-icon-badge {
           width: 80px; height: 80px;
           background: rgba(61, 220, 151, 0.1);
