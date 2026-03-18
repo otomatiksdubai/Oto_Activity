@@ -67,7 +67,7 @@ export default function Landing() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -144,7 +144,7 @@ export default function Landing() {
     { name: 'Rinky Singhania', role: 'Parent', text: 'Enrolled my daughter and very happy with overall experience. The trainers and management take real efforts to engage the kid and take the parents through the process end to end.' },
     { name: 'Anil Noairs', role: 'Local Guide', text: 'Impressed with what Otomatiks have achieved so far in its short tenure. Iam sure the kids are much enriched in their pursuit of Robotics and STEM knowledge. Dubai is truly blessed to have you.' },
     { name: 'Ruba Hmeedat', role: 'Parent', text: 'I’m a grateful for the time my son spent to learn in Otomatiks Training center. He improves his skills. The team is very kind, the place is very nice.' },
-    { name: 'Preeti Aswani', role: 'Parent of Aryan, 9', text: 'Really fun class. I rate it 15,000 stars. Aryan loves it!' }
+    { name: 'Preeti Aswani', role: 'Parent of Aryan', text: 'Really fun class. I rate it 15,000 stars. Aryan loves it!' }
   ];
 
   const [currentIndex, setCurrentIndex] = useState(testimonials.length * 25); // Start in the middle of 50 sets
@@ -214,10 +214,6 @@ export default function Landing() {
       {/* Background Pattern */}
       <div className="bg-pattern"></div>
 
-      {/* Top Gradient Fade Mask */}
-      <div className="nav-fade-mask"></div>
-
-      {/* ── Navigation ── */}
       <nav className={`landing-nav ${menuOpen ? 'menu-is-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
         <div className="landing-container">
           <div className="landing-logo-text">
@@ -428,9 +424,9 @@ export default function Landing() {
               {repeatedTestimonials.map((t, i) => {
                 const isActive = i === currentIndex;
                 return (
-                  <div 
-                    className={`testimonial-card-v2 ${isActive ? 'active' : ''}`} 
-                    key={i} 
+                  <div
+                    className={`testimonial-card-v2 ${isActive ? 'active' : ''}`}
+                    key={i}
                     onClick={() => setCurrentIndex(i)}
                   >
                     <div className="testimonial-stars">★★★★★</div>
@@ -446,14 +442,14 @@ export default function Landing() {
                 );
               })}
             </div>
-            
+
             <div className="testimonial-dots">
               {testimonials.map((_, i) => {
                 const isDotActive = i === currentIndex % testimonials.length;
                 return (
-                  <span 
-                    key={i} 
-                    className={`test-dot ${isDotActive ? 'active' : ''}`} 
+                  <span
+                    key={i}
+                    className={`test-dot ${isDotActive ? 'active' : ''}`}
                     onClick={() => {
                       const currentMod = currentIndex % testimonials.length;
                       let diff = i - currentMod;
