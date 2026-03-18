@@ -67,8 +67,37 @@ export default function Login({ setUser }) {
     <div className="login-container">
       <div className="bg-pattern"></div>
       
-      <div className="login-card">
-        <img src={logo} alt="Otomatiks Logo" className="login-logo" />
+      <div className="login-card" style={{ position: 'relative' }}>
+        <button 
+          onClick={() => navigate('/')}
+          className="btn ghost"
+          style={{
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+            padding: '6px 12px',
+            background: 'transparent',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            color: 'var(--muted)',
+            fontWeight: '600',
+            fontSize: '13px',
+            cursor: 'pointer',
+            transition: 'color 0.2s',
+            zIndex: 10
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text)'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted)'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back
+        </button>
+        <img src={logo} alt="Otomatiks Logo" className="login-logo" style={{ marginTop: '20px' }} />
         
         <h1 style={{ textAlign: 'center', marginBottom: '8px' }}>Welcome Back</h1>
         <p className="muted" style={{ textAlign: 'center', marginBottom: '32px' }}>
