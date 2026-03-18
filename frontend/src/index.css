@@ -1908,6 +1908,7 @@ html {
   font-weight: 800;
   font-size: 16px;
   color: var(--accent);
+  text-align: center;
 }
 
 .testimonial-role {
@@ -1916,6 +1917,7 @@ html {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  text-align: center;
 }
 
 /* Dots Navigation */
