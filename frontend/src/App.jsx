@@ -11,6 +11,7 @@ import Reports from './pages/Reports';
 import logo from './assets/logo.png';
 
 import Landing from './pages/Landing';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -125,6 +126,7 @@ function App() {
 export default function AppWrapper() {
   return (
     <Router>
+      <CustomCursor />
       <App />
     </Router>
   );

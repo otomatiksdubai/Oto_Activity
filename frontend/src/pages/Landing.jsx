@@ -264,17 +264,23 @@ export default function Landing() {
           <h2 className="section-title">At a Glance<span className="dot">.</span></h2>
           <div className="feature-grid">
             <div className="feature-card">
-              <span className="feature-icon" style={{fontSize: '24px', fontWeight: '800'}}>R</span>
+              <span className="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
               <h3 className="feature-title">Experience</h3>
               <p className="muted">Hands-on learning with world-class robotics kits and expert mentors.</p>
             </div>
             <div className="feature-card">
-              <span className="feature-icon" style={{fontSize: '24px', fontWeight: '800'}}>P</span>
+              <span className="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.9 2.33 2.33 2.33-5.24 5.24-2.33-2.33z"/></svg>
+              </span>
               <h3 className="feature-title">Practice</h3>
               <p className="muted">Learning by doing. Building real models that solve real-world problems.</p>
             </div>
             <div className="feature-card">
-              <span className="feature-icon" style={{fontSize: '24px', fontWeight: '800'}}>S</span>
+              <span className="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+              </span>
               <h3 className="feature-title">Skills</h3>
               <p className="muted">Developing 21st-century skills: Coding, Logic, and Engineering.</p>
             </div>
