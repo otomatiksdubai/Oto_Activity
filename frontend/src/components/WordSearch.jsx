@@ -163,9 +163,45 @@ export default function WordSearch() {
     setCurrentSelection([]);
   };
 
+  const handleTouchStart = (e, r, c) => {
+    if (isWon) return;
+    // Prevent scrolling while playing
+    if (e.cancelable) e.preventDefault();
+    handleMouseDown(r, c);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    // Prevent scrolling while playing
+    if (e.cancelable) e.preventDefault();
+
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element && element.classList.contains('grid-cell')) {
+      const r = parseInt(element.getAttribute('data-row'));
+      const c = parseInt(element.getAttribute('data-col'));
+      
+      if (!isNaN(r) && !isNaN(c)) {
+        if (selectionEnd?.r !== r || selectionEnd?.c !== c) {
+          setSelectionEnd({ r, c });
+          setCurrentSelection(getCellsBetween(selectionStart, { r, c }));
+        }
+      }
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    handleMouseUp();
+  };
+
   useEffect(() => {
     window.addEventListener('mouseup', handleMouseUp);
-    return () => window.removeEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchend', handleTouchEnd);
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
   }, [isDragging, currentSelection]);
 
   const isCellSelected = (r, c) => currentSelection.some(cell => cell.r === r && cell.c === c);
@@ -181,13 +217,19 @@ export default function WordSearch() {
       </div>
 
       <div className="word-search-layout">
-        <div className="word-grid" onMouseLeave={() => {}}>
+        <div 
+          className="word-grid" 
+          onMouseLeave={() => {}}
+          onTouchMove={handleTouchMove}
+        >
           {grid.map((row, rIdx) => (
             <div key={rIdx} className="grid-row">
               {row.map((char, cIdx) => (
                 <div 
                   key={cIdx} 
                   className={`grid-cell ${isCellSelected(rIdx, cIdx) ? 'selected' : ''} ${getPermanentCell(rIdx, cIdx) ? 'permanent' : ''}`}
+                  data-row={rIdx}
+                  data-col={cIdx}
                   style={getPermanentCell(rIdx, cIdx) ? { 
                     backgroundColor: `${getPermanentCell(rIdx, cIdx).color}15`, 
                     borderColor: getPermanentCell(rIdx, cIdx).color,
@@ -197,6 +239,7 @@ export default function WordSearch() {
                   } : {}}
                   onMouseDown={() => handleMouseDown(rIdx, cIdx)}
                   onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
+                  onTouchStart={(e) => handleTouchStart(e, rIdx, cIdx)}
                 >
                   {char}
                 </div>
@@ -281,6 +324,7 @@ export default function WordSearch() {
           background: #f8faff;
           padding: 8px;
           border-radius: 12px;
+          touch-action: none;
         }
         .grid-row {
           display: flex;

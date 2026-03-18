@@ -1117,9 +1117,53 @@ table.invoice th {
 }
 
 .feature-icon {
-  font-size: 48px;
-  margin-bottom: 24px;
-  display: inline-block;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  border-radius: 18px;
+  border: 1.5px solid rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.02);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Feature Icon Color Variations */
+.feature-card:nth-child(1) .feature-icon {
+  color: var(--accent);
+  background: rgba(26, 86, 178, 0.05);
+}
+.feature-card:nth-child(1):hover .feature-icon {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: rotate(12deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(26, 86, 178, 0.2);
+}
+
+.feature-card:nth-child(2) .feature-icon {
+  color: var(--accent2);
+  background: rgba(240, 196, 25, 0.08);
+}
+.feature-card:nth-child(2):hover .feature-icon {
+  background: var(--accent2);
+  color: #000;
+  border-color: var(--accent2);
+  transform: rotate(12deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(240, 196, 25, 0.2);
+}
+
+.feature-card:nth-child(3) .feature-icon {
+  color: var(--accent-pink);
+  background: rgba(255, 64, 129, 0.05);
+}
+.feature-card:nth-child(3):hover .feature-icon {
+  background: var(--accent-pink);
+  color: #fff;
+  border-color: var(--accent-pink);
+  transform: rotate(12deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(255, 64, 129, 0.2);
 }
 
 .feature-title {
