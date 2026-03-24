@@ -1687,30 +1687,59 @@ html {
   margin-bottom: 20px;
 }
 
-.trust-logos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
+.trust-logos-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0;
+  white-space: nowrap;
+}
+
+.trust-logos-marquee::before,
+.trust-logos-marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.trust-logos-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, #fff, transparent);
+}
+
+.trust-logos-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+.trust-logos-track {
+  display: inline-flex;
   align-items: center;
+  gap: 80px;
+  animation: trust-scroll 24s linear infinite;
+  padding-right: 80px;
 }
 
-.trust-logo-chip {
-  padding: 8px 20px;
-  border: 1.5px solid var(--line);
-  border-radius: 99px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  transition: all 0.25s ease;
-  cursor: default;
+@keyframes trust-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } 
 }
 
-.trust-logo-chip:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(26, 86, 178, 0.04);
+.trust-logo-img {
+  height: 52px;
+  width: auto;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
+
+.trust-logo-img:hover {
+  transform: scale(1.1);
+}
+
 
 /* ── 2. Marquee Ticker ── */
 .marquee-wrapper {

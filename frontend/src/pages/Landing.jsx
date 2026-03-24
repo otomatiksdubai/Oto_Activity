@@ -5,6 +5,14 @@ import heroKids from '../assets/stud.jpg';
 import programsImg from '../assets/programs.png';
 import WordSearch from '../components/WordSearch';
 
+import arduinoLogo from '../assets/logo/Arduino_Logo.svg';
+import legoLogo from '../assets/logo/LEGO_logo.svg';
+import raspberryPiLogo from '../assets/logo/Raspberry Pi.svg';
+import scratchLogo from '../assets/logo/Scratchlogo.svg';
+import htmlLogo from '../assets/logo/html.svg';
+import pythonLogo from '../assets/logo/python.svg';
+
+
 // ─── Animated Counter Hook ───────────────────────────────────────────────────
 function useCounter(target, duration = 1800, suffix = '') {
   const [count, setCount] = useState(0);
@@ -129,10 +137,7 @@ export default function Landing() {
   const c2 = useCounter('12', 1500, '+');
   const c3 = useCounter('500', 1800, '+');
 
-  const marqueeItems = [
-    'Robotics', 'AI & Coding', 'LEGO WeDo', 'Arduino', 'Scratch',
-    'Competitions', 'STEM Projects', 'LEGO Mindstorms', 'Game Dev', 'Python'
-  ];
+
 
   const testimonials = [
     { name: 'Rashmi Chauhan', role: 'Parent of Khyaati', text: 'My daughter is enjoying her robotics class. One thing I like most is that they focus on practical learning along with the theory portion. She is able to visualize everything she is learning. The teachers are very supportive.' },
@@ -199,7 +204,14 @@ export default function Landing() {
     },
   ];
 
-  const partnerLogos = ['LEGO Education', 'Scratch MIT', 'Arduino', 'Raspberry Pi', 'Google for Education', 'Microsoft STEM'];
+  const partnerLogos = [
+    { name: 'LEGO', src: legoLogo },
+    { name: 'Scratch', src: scratchLogo },
+    { name: 'Arduino', src: arduinoLogo },
+    { name: 'Raspberry Pi', src: raspberryPiLogo },
+    { name: 'Python', src: pythonLogo },
+    { name: 'HTML', src: htmlLogo }
+  ];
 
   return (
     <div className="landing-wrapper">
@@ -267,22 +279,16 @@ export default function Landing() {
       <div className="trust-bar reveal">
         <div className="landing-container">
           <p className="trust-label">Curriculum powered by world-class tools</p>
-          <div className="trust-logos">
-            {partnerLogos.map((l, i) => (
-              <span className="trust-logo-chip" key={i}>{l}</span>
-            ))}
+          <div className="trust-logos-marquee">
+            <div className="trust-logos-track">
+              {[...partnerLogos, ...partnerLogos, ...partnerLogos, ...partnerLogos].map((l, i) => (
+                <img src={l.src} alt={l.name} className="trust-logo-img" key={i} title={l.name} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── 2. Marquee Ticker ── */}
-      <div className="marquee-wrapper">
-        <div className="marquee-track">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span className="marquee-item" key={i}>{item}</span>
-          ))}
-        </div>
-      </div>
 
       {/* Wave Separator */}
       <div className="wave-divider">
