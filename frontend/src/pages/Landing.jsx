@@ -11,6 +11,7 @@ import raspberryPiLogo from '../assets/logo/Raspberry Pi.svg';
 import scratchLogo from '../assets/logo/Scratchlogo.svg';
 import htmlLogo from '../assets/logo/html.svg';
 import pythonLogo from '../assets/logo/python.svg';
+import dirhamLogo from '../assets/logo/UAE_Dirham_Symbol.svg';
 
 
 // ─── Animated Counter Hook ───────────────────────────────────────────────────
@@ -264,7 +265,7 @@ export default function Landing() {
                 problem-solving, and critical thinking skills in children of all ages.
               </p>
               <div className="hero-actions">
-                <button className="landing-btn-primary" onClick={() => navigate('/login')}>Our Classes</button>
+                <a href="#programs" className="landing-btn-primary">Our Classes</a>
                 <a href="#faq" className="landing-btn-outline">Learn More</a>
               </div>
             </div>
@@ -474,21 +475,33 @@ export default function Landing() {
           <div className="pricing-grid">
             <div className="price-card">
               <h3 className="feature-title">Standard</h3>
-              <div className="price-val">$120<span>/month</span></div>
+              <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '48px', height: '48px', backgroundColor: 'currentColor', WebkitMaskImage: `url(${dirhamLogo})`, maskImage: `url(${dirhamLogo})`, WebkitMaskSize: 'contain', maskSize: 'contain', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center', marginRight: '6px' }}></div>
+                120<span>/month</span>
+              </div>
               <p className="small muted">1 Session per week</p>
-              <button className="landing-btn-outline" style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
+              <button className="landing-btn-outline" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
+              <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
             <div className="price-card popular">
-              <h3 className="feature-title">Business</h3>
-              <div className="price-val">$150<span>/month</span></div>
+              <h3 className="feature-title">Level Wise</h3>
+              <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '48px', height: '48px', backgroundColor: 'currentColor', WebkitMaskImage: `url(${dirhamLogo})`, maskImage: `url(${dirhamLogo})`, WebkitMaskSize: 'contain', maskSize: 'contain', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center', marginRight: '6px' }}></div>
+                1450<span>/Level</span>
+              </div>
               <p className="small muted">2 Sessions per week</p>
-              <button className="landing-btn-primary" onClick={() => navigate('/login')} style={{ marginTop: '30px', width: '100%', background: '#000', color: '#fff' }}>Enroll Now</button>
+              <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%', background: '#000', color: '#fff' }}>Enroll Now</button>
+              <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
             <div className="price-card">
               <h3 className="feature-title">Professional</h3>
-              <div className="price-val">$200<span>/month</span></div>
+              <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '48px', height: '48px', backgroundColor: 'currentColor', WebkitMaskImage: `url(${dirhamLogo})`, maskImage: `url(${dirhamLogo})`, WebkitMaskSize: 'contain', maskSize: 'contain', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center', marginRight: '6px' }}></div>
+                200<span>/month</span>
+              </div>
               <p className="small muted">Daily Lab Access</p>
-              <button className="landing-btn-outline" style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
+              <button className="landing-btn-outline" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
+              <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
           </div>
         </div>
