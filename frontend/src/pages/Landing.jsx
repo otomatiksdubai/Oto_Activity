@@ -290,12 +290,6 @@ export default function Landing() {
       </div>
 
 
-      {/* Wave Separator */}
-      <div className="wave-divider">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 36.7C840 27 960 13 1080 16.7C1200 20 1320 40 1380 50L1440 60V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z" fill="#fcfcfc" />
-        </svg>
-      </div>
 
       {/* ── Features ── */}
       <section className="landing-section reveal" id="about" style={{ paddingTop: '40px' }}>
@@ -327,7 +321,7 @@ export default function Landing() {
           </div>
 
           <div className="fun-zone reveal" style={{ marginTop: '60px', textAlign: 'center' }}>
-            <span className="section-label" style={{ color: 'var(--accent-pink)', background: 'rgba(255, 64, 129, 0.1)', margin: '0 auto 15px' }}>FUN LEARNING ZONE</span>
+            <span className="section-label" style={{ color: 'var(--accent-pink)', background: 'linear-gradient(90deg, rgba(255,64,129,0) 0%, rgba(255,64,129,0.15) 25%, rgba(255,64,129,0.15) 75%, rgba(255,64,129,0) 100%)', margin: '0 auto 15px', padding: '6px 0' }}>FUN LEARNING ZONE</span>
             <h2 className="section-title" style={{ fontSize: '32px' }}>Robotics Word Search<span className="dot" style={{ color: 'var(--accent-pink)' }}>.</span></h2>
             <p className="muted" style={{ maxWidth: '600px', marginBottom: '30px', marginLeft: 'auto', marginRight: 'auto' }}>Can you find all the hidden robotics terms? Click the letters to select a word!</p>
             <WordSearch />
