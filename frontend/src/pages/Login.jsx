@@ -65,6 +65,14 @@ export default function Login({ setUser }) {
 
   return (
     <div className="login-container">
+      {/* Premium Fluid Mesh Background */}
+      <div className="mesh-bg">
+        <div className="mesh-blob mesh-1"></div>
+        <div className="mesh-blob mesh-2"></div>
+        <div className="mesh-blob mesh-3"></div>
+        <div className="mesh-blob mesh-4"></div>
+      </div>
+      
       <div className="bg-pattern"></div>
       
       <div className="login-card" style={{ position: 'relative' }}>
