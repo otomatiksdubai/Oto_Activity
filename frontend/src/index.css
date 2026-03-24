@@ -866,48 +866,61 @@ table.invoice th {
 .mesh-blob {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.6;
-  animation: fluid-morph 20s infinite alternate ease-in-out;
+  opacity: 0.7;
   transform-origin: center;
-  will-change: transform;
+  will-change: transform, filter;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  mix-blend-mode: multiply;
 }
 
 .mesh-1 {
   top: -15%; left: -10%;
   width: 55vw; height: 55vw;
-  background: radial-gradient(circle, rgba(26,86,178,0.4) 0%, rgba(26,86,178,0) 70%); /* Deep Blue */
-  animation-delay: 0s;
+  background: radial-gradient(circle, rgba(26,86,178,0.4) 0%, rgba(26,86,178,0) 70%);
+  animation: morph-1 12s infinite alternate ease-in-out;
 }
 
 .mesh-2 {
   bottom: -20%; right: -15%;
   width: 60vw; height: 60vw;
-  background: radial-gradient(circle, rgba(255,64,129,0.3) 0%, rgba(255,64,129,0) 70%); /* Pink */
-  animation-duration: 25s;
+  background: radial-gradient(circle, rgba(255,64,129,0.3) 0%, rgba(255,64,129,0) 70%);
+  animation: morph-2 15s infinite alternate-reverse ease-in-out;
 }
 
 .mesh-3 {
   top: 30%; left: 30%;
-  width: 40vw; height: 40vw;
-  background: radial-gradient(circle, rgba(61,220,151,0.2) 0%, rgba(61,220,151,0) 70%); /* Mint Green */
-  animation-duration: 28s;
-  animation-direction: alternate-reverse;
+  width: 45vw; height: 45vw;
+  background: radial-gradient(circle, rgba(61,220,151,0.25) 0%, rgba(61,220,151,0) 70%);
+  animation: morph-3 10s infinite alternate ease-in-out;
 }
 
 .mesh-4 {
   top: -10%; right: 15%;
-  width: 40vw; height: 40vw;
-  background: radial-gradient(circle, rgba(240,196,25,0.25) 0%, rgba(240,196,25,0) 70%); /* Yellow */
-  animation-duration: 22s;
-  animation-direction: alternate-reverse;
+  width: 45vw; height: 45vw;
+  background: radial-gradient(circle, rgba(240,196,25,0.3) 0%, rgba(240,196,25,0) 70%);
+  animation: morph-4 14s infinite alternate-reverse ease-in-out;
 }
 
-@keyframes fluid-morph {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  33% { transform: translate(8vw, -8vh) scale(1.1) rotate(15deg); }
-  66% { transform: translate(-5vw, 10vh) scale(0.9) rotate(-10deg); }
-  100% { transform: translate(5vw, 5vh) scale(1.15) rotate(5deg); }
+@keyframes morph-1 {
+  0% { transform: translate(0, 0) scale(1); filter: hue-rotate(0deg); }
+  50% { transform: translate(45vw, 40vh) scale(1.1); filter: hue-rotate(180deg); }
+  100% { transform: translate(80vw, 15vh) scale(0.9); filter: hue-rotate(360deg); }
+}
+@keyframes morph-2 {
+  0% { transform: translate(0, 0) scale(1); filter: hue-rotate(0deg); }
+  50% { transform: translate(-45vw, -40vh) scale(0.9); filter: hue-rotate(180deg); }
+  100% { transform: translate(-80vw, -10vh) scale(1.1); filter: hue-rotate(360deg); }
+}
+@keyframes morph-3 {
+  0% { transform: translate(0, 0) scale(1); filter: hue-rotate(0deg); }
+  50% { transform: translate(-30vw, -30vh) scale(1.2); filter: hue-rotate(-180deg); }
+  100% { transform: translate(30vw, -60vh) scale(0.9); filter: hue-rotate(-360deg); }
+}
+@keyframes morph-4 {
+  0% { transform: translate(0, 0) scale(1); filter: hue-rotate(0deg); }
+  50% { transform: translate(-20vw, 50vh) scale(0.85); filter: hue-rotate(180deg); }
+  100% { transform: translate(-60vw, 80vh) scale(1.15); filter: hue-rotate(360deg); }
 }
 
 .landing-container {
@@ -1152,6 +1165,7 @@ table.invoice th {
 /* Base Section Styling */
 .landing-section {
   padding: 120px 0;
+  scroll-margin-top: 120px;
 }
 
 .section-label {
@@ -1479,7 +1493,8 @@ html {
 .reveal {
   opacity: 0;
   transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .reveal-visible {
@@ -1672,49 +1687,37 @@ html {
 
 /* ── 8. Trust / Partner Bar ── */
 .trust-bar {
-  background: #fff;
-  padding: 48px 0 32px;
-  border-bottom: 1px solid var(--line);
+  background: transparent;
+  padding: 16px 0 8px; /* Tighter padding */
+  border-bottom: none;
+  margin-top: -80px;
+  position: relative;
+  z-index: 10;
 }
 
 .trust-label {
   text-align: center;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .trust-logos-marquee {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 10px 0;
+  padding: 16px 0;
   white-space: nowrap;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
-.trust-logos-marquee::before,
-.trust-logos-marquee::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 120px;
-  height: 100%;
-  z-index: 2;
-  pointer-events: none;
-}
 
-.trust-logos-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, #fff, transparent);
-}
-
-.trust-logos-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, #fff, transparent);
-}
 
 .trust-logos-track {
   display: inline-flex;
@@ -1722,18 +1725,24 @@ html {
   gap: 80px;
   animation: trust-scroll 24s linear infinite;
   padding-right: 80px;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 @keyframes trust-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } 
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); } 
 }
 
 .trust-logo-img {
   height: 52px;
   width: auto;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  will-change: transform;
 }
 
 .trust-logo-img:hover {
@@ -1859,7 +1868,8 @@ html {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
   /* Centering math: Offset by half container, then center the active card index */
-  transform: translateX(calc(50% - (var(--card-w) / 2) - var(--card-m) - (var(--active-index) * var(--step))));
+  margin-left: calc(50% - (var(--card-w) / 2) - var(--card-m));
+  transform: translateX(calc(-1 * var(--active-index) * var(--step)));
 }
 
 .testimonial-card-v2 {
