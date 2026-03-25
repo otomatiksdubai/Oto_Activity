@@ -12,6 +12,7 @@ import logo from './assets/logo.png';
 
 import Landing from './pages/Landing';
 import CustomCursor from './components/CustomCursor';
+import { GlobalBackground } from './components/GlobalAssets';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -126,6 +127,7 @@ function App() {
 export default function AppWrapper() {
   return (
     <Router>
+      <GlobalBackground />
       <CustomCursor />
       <App />
     </Router>
