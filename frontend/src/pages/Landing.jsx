@@ -510,10 +510,11 @@ export default function Landing() {
 
       {/* ── Register CTA ── */}
       <section className="landing-container reveal">
-        <div className="cta-banner">
+        <div className="cta-banner" style={{ position: 'relative', overflow: 'hidden', maxWidth: '800px', margin: '0 auto' }}>
           <span className="section-label" style={{ color: '#000' }}>GET IN TOUCH</span>
-          <h2>Sign Up Now for a <br />Free Trial Lesson<span style={{ color: '#1a56b2' }}>.</span></h2>
-          <button className="landing-btn-primary" onClick={() => navigate('/login')} style={{ background: '#000', color: '#fff' }}>Join Otomatiks Today</button>
+          <h2 style={{ fontSize: '48px' }}>Sign Up Now for just <br /><span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}><DirhamIcon size={42} /> 30</span> for a trial lesson<span style={{ color: '#1a56b2' }}>.</span></h2>
+          <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ background: '#000', color: '#fff', marginTop: '20px' }}>Join Otomatiks Today</button>
+          <p style={{ position: 'absolute', bottom: '16px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: 'rgba(0,0,0,0.4)', fontWeight: '700' }}>*T & C Apply</p>
         </div>
       </section>
 
@@ -527,7 +528,7 @@ export default function Landing() {
             {/* Info Panel */}
             <div className="location-info-card">
               <h3 className="location-name">Otomatiks Training Centre</h3>
-              <span className="location-badge">JLT · Dubai</span>
+              <span className="location-badge">JLT | Burjuman | Al Nahda - Dubai</span>
 
               <div className="location-details">
                 <div className="location-detail-row">
