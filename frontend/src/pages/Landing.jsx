@@ -489,7 +489,7 @@ export default function Landing() {
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
                 14000<span></span>
               </div>
-              <p className="small muted">Complete Course</p>
+              <p className="small muted">6 Levels - Complete Course</p>
               <button className="landing-btn-outline" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
               <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
