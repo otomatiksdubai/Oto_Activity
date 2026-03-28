@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 const CustomCursor = () => {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const dotRef = useRef(null);
+    const outlineRef = useRef(null);
     const [isHovering, setIsHovering] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const moveMouse = (e) => {
-            setPosition({ x: e.clientX, y: e.clientY });
             if (!isVisible) setIsVisible(true);
+            
+            // Use direct DOM manipulation to prevent laggy React state updates
+            if (dotRef.current) {
+                dotRef.current.style.left = `${e.clientX}px`;
+                dotRef.current.style.top = `${e.clientY}px`;
+            }
+            if (outlineRef.current) {
+                outlineRef.current.style.left = `${e.clientX}px`;
+                outlineRef.current.style.top = `${e.clientY}px`;
+            }
         };
 
         const handleMouseOver = (e) => {
@@ -38,18 +48,12 @@ const CustomCursor = () => {
     return (
         <>
             <div 
+                ref={dotRef}
                 className={`custom-cursor-dot ${isHovering ? 'hover' : ''}`}
-                style={{ 
-                    left: `${position.x}px`, 
-                    top: `${position.y}px` 
-                }}
             />
             <div 
+                ref={outlineRef}
                 className={`custom-cursor-outline ${isHovering ? 'hover' : ''}`}
-                style={{ 
-                    left: `${position.x}px`, 
-                    top: `${position.y}px` 
-                }}
             />
             <style dangerouslySetInnerHTML={{ __html: `
                 * {
