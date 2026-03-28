@@ -16,7 +16,7 @@ app.set('trust proxy', 1);
 app.use(cors({
   origin: function (origin, callback) {
     // Allow same-origin requests (no origin header) or matching FRONTEND_URL
-    if (!origin || origin === process.env.FRONTEND_URL || origin.includes('onrender.com') || origin.includes('localhost')) {
+    if (!origin || origin === process.env.FRONTEND_URL || origin.includes('onrender.com') || origin.includes('localhost') || origin.includes('robotics-me.com')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
