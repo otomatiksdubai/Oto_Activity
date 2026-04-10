@@ -15,12 +15,8 @@ app.set('trust proxy', 1);
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow same-origin requests (no origin header) or matching FRONTEND_URL
-    if (!origin || origin === process.env.FRONTEND_URL || origin.includes('onrender.com') || origin.includes('localhost') || origin.includes('robotics-me.com')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // Allow any origin to support new domains seamlessly
+    callback(null, true);
   },
   credentials: true
 }));
@@ -37,7 +33,8 @@ app.use(session({
     collectionName: 'http_sessions'
   }),
   cookie: {
-    secure: false, // Set to true in production with HTTPS
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 // 24 hours
   }
@@ -98,6 +95,11 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel Serverless
+module.exports = app;
