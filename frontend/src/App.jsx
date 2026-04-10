@@ -58,7 +58,6 @@ function App() {
   if (location.pathname === '/' && !user) {
     return (
       <>
-        <div className="test-banner">test run UI</div>
         <Landing />
       </>
     );
@@ -73,7 +72,6 @@ function App() {
 
   return (
     <div className="container">
-      <div className="test-banner">test run UI</div>
       {user && (
         <div className="topbar">
           <div className="brand">
