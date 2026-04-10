@@ -16,35 +16,7 @@
   --radius: 24px;
 }
 
-.test-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: linear-gradient(90deg, #ff4081, #f0c419);
-  color: white;
-  text-align: center;
-  padding: 8px 0;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  z-index: 9999;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  pointer-events: none;
-}
 
-/* Adjust container to not be covered by fixed banner */
-.container {
-  padding-top: 60px !important;
-  position: relative;
-  z-index: 1;
-}
-
-/* Adjust landing nav to move down for the banner */
-.landing-nav {
-  top: 56px !important;
-}
 
 * {
   box-sizing: border-box;
