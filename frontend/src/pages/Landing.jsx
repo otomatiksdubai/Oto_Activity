@@ -464,12 +464,12 @@ export default function Landing() {
           <h2 className="section-title">Our Pricing<span className="dot">.</span></h2>
           <div className="pricing-grid">
             <div className="price-card">
-              <h3 className="feature-title">Standard</h3>
+              <h3 className="feature-title">Bootcamp</h3>
               <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
-                65 <span>/ Session</span>
+                30 <span>/ Trail Session</span>
               </div>
-              <p className="small muted">1 Session per week</p>
+              <p className="small muted">On Saturdays</p>
               <button className="landing-btn-outline" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
               <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>

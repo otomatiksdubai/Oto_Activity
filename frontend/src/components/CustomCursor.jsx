@@ -9,7 +9,7 @@ const CustomCursor = () => {
     useEffect(() => {
         const moveMouse = (e) => {
             if (!isVisible) setIsVisible(true);
-            
+
             // Use direct DOM manipulation to prevent laggy React state updates
             if (dotRef.current) {
                 dotRef.current.style.left = `${e.clientX}px`;
@@ -24,13 +24,13 @@ const CustomCursor = () => {
         const handleMouseOver = (e) => {
             // Check if element is clickable
             const target = e.target;
-            const isClickable = 
-                target.tagName === 'BUTTON' || 
-                target.tagName === 'A' || 
-                target.closest('button') || 
+            const isClickable =
+                target.tagName === 'BUTTON' ||
+                target.tagName === 'A' ||
+                target.closest('button') ||
                 target.closest('a') ||
                 window.getComputedStyle(target).cursor === 'pointer';
-            
+
             setIsHovering(isClickable);
         };
 
@@ -47,15 +47,16 @@ const CustomCursor = () => {
 
     return (
         <>
-            <div 
+            <div
                 ref={dotRef}
                 className={`custom-cursor-dot ${isHovering ? 'hover' : ''}`}
             />
-            <div 
+            <div
                 ref={outlineRef}
                 className={`custom-cursor-outline ${isHovering ? 'hover' : ''}`}
             />
-            <style dangerouslySetInnerHTML={{ __html: `
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 * {
                     cursor: none !important;
                 }
