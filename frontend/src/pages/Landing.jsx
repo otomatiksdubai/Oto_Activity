@@ -469,7 +469,7 @@ export default function Landing() {
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
                 30 <span>/ Trail Session</span>
               </div>
-              <p className="small muted">On Saturdays</p>
+              <p className="small muted">On All Saturdays</p>
               <button className="landing-btn-outline" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%' }}>Enroll Now</button>
               <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
@@ -477,7 +477,7 @@ export default function Landing() {
               <h3 className="feature-title">Level Wise</h3>
               <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
-                1450 <span>/ Level</span>
+                3500 <span>/ Level</span>
               </div>
               <p className="small muted">2 Sessions per week</p>
               <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%', background: '#000', color: '#fff' }}>Enroll Now</button>
@@ -589,7 +589,7 @@ export default function Landing() {
         <div className="liquid-glass-pill">
           <span className="liquid-pulse-dot"></span>
           <span className="liquid-cta-text">
-            <strong>Limited Spots!</strong> Book a <strong>FREE Trial</strong> Today
+            <strong>Limited Offer!</strong> Book a <strong>Demo Session</strong> Today
           </span>
           <button className="liquid-cta-btn" onClick={() => navigate('/login')}>
             Reserve My Spot ✦
