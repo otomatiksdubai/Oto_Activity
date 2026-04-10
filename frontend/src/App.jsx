@@ -11,7 +11,7 @@ import Reports from './pages/Reports';
 import logo from './assets/logo.png';
 
 import Landing from './pages/Landing';
-import CustomCursor from './components/CustomCursor';
+
 import { GlobalBackground } from './components/GlobalAssets';
 
 function App() {
@@ -126,7 +126,7 @@ export default function AppWrapper() {
   return (
     <Router>
       <GlobalBackground />
-      <CustomCursor />
+
       <App />
     </Router>
   );
