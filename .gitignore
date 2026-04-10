@@ -8,4 +8,4 @@ build/
 .vscode/local history
 backend\.env
 .env
-node_modules
+node_modulesbackend/.env 
