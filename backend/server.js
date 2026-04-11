@@ -69,17 +69,17 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/students', studentRoutes);
-app.use('/api/staff', staffRoutes);
-app.use('/api/sessions', sessionRoutes);
-app.use('/api/attendance', attendanceRoutes);
-app.use('/api/fees', feesRoutes);
-app.use('/api/reports', reportRoutes);
-app.use('/api/courses', courseRoutes);
+app.use('/auth', authRoutes);
+app.use('/students', studentRoutes);
+app.use('/staff', staffRoutes);
+app.use('/sessions', sessionRoutes);
+app.use('/attendance', attendanceRoutes);
+app.use('/fees', feesRoutes);
+app.use('/reports', reportRoutes);
+app.use('/courses', courseRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ status: 'Server is running' });
 });
 
