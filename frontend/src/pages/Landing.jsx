@@ -591,7 +591,7 @@ export default function Landing() {
           <span className="liquid-cta-text">
             <strong>Limited Offer!</strong> Book a <strong>Demo Session</strong> Today
           </span>
-          <button className="liquid-cta-btn" onClick={() => navigate('/login')}>
+          <button className="liquid-cta-btn" onClick={() => window.open('https://wa.me/971528834358', '_blank')}>
             Reserve My Spot ✦
           </button>
         </div>
