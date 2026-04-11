@@ -136,7 +136,7 @@ export default function Landing() {
 
   // Counters
   const c1 = useCounter('10', 1500, '+');
-  const c2 = useCounter('12', 1500, '+');
+  const c2 = useCounter('15', 1500, '+');
   const c3 = useCounter('500', 1800, '+');
 
 
