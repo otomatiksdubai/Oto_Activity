@@ -41,7 +41,7 @@ This guide explains how to set up and connect a MongoDB Atlas database to your a
 Example `.env` content:
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://admin:myPassword123@cluster0.otomatiks.mongodb.net/institute-portal?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://admin:yourPassword@your-cluster.mongodb.net/institute-portal?retryWrites=true&w=majority
 JWT_SECRET=your_jwt_secret_key_here
 SESSION_SECRET=your_session_secret_key_here
 NODE_ENV=development

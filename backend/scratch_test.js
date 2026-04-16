@@ -1,6 +1,6 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-
-const uri = 'mongodb+srv://otomatiksdubai:Oto2025@otm.l0zlp7n.mongodb.net/institute-portal?retryWrites=true&w=majority&appName=Otm';
+const uri = process.env.MONGODB_URI;
 
 async function test() {
     try {
