@@ -13,6 +13,7 @@ import logo from './assets/logo.png';
 import Landing from './pages/Landing';
 
 import { GlobalBackground } from './components/GlobalAssets';
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const [user, setUser] = useState(null);
@@ -126,7 +127,7 @@ export default function AppWrapper() {
   return (
     <Router>
       <GlobalBackground />
-
+      <Analytics />
       <App />
     </Router>
   );
