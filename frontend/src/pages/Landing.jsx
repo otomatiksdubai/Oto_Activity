@@ -13,6 +13,8 @@ import htmlLogo from '../assets/logo/html.svg';
 import pythonLogo from '../assets/logo/python.svg';
 
 import { DirhamIcon } from '../components/GlobalAssets';
+import UnderDevelopmentOverlay from '../components/UnderDevelopmentOverlay';
+
 
 
 // ─── Animated Counter Hook ───────────────────────────────────────────────────
@@ -331,6 +333,7 @@ export default function Landing() {
                 <div className="timeline-icon" style={{ background: t.color }}>{t.icon}</div>
                 <div className="timeline-connector" style={{ background: i < timeline.length - 1 ? t.color : 'transparent' }}></div>
                 <div className="timeline-card">
+                  <UnderDevelopmentOverlay message="Path Coming Soon" />
                   <span className="program-tag" style={{ color: t.color }}>{t.age}</span>
                   <h3 className="feature-title" style={{ fontSize: '20px', margin: '8px 0' }}>{t.kit}</h3>
                   <p className="small muted">{t.desc}</p>
@@ -354,6 +357,7 @@ export default function Landing() {
               { img: programsImg, tag: 'AGES 13+', name: 'Arduino AI', desc: 'Electronics, C++ programming, and AI-powered autonomous robots.' },
             ].map((p, i) => (
               <div className="program-card" key={i}>
+                <UnderDevelopmentOverlay />
                 <img src={p.img} className="program-img" alt={p.name} />
                 <div className="program-content">
                   <span className="program-tag">{p.tag}</span>

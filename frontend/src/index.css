@@ -1268,6 +1268,7 @@ table.invoice th {
   border-radius: 32px;
   overflow: hidden;
   transition: transform 0.3s ease;
+  position: relative; /* Keep this for overlay positioning */
 }
 
 .program-card:hover {
@@ -1829,6 +1830,7 @@ html {
   margin: 0 8px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.04);
   transition: transform 0.3s ease;
+  position: relative; /* Added for overlay positioning */
 }
 
 .timeline-card:hover {
