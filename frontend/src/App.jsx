@@ -128,7 +128,6 @@ export default function AppWrapper() {
   return (
     <Router>
       <GlobalBackground />
-      <Analytics />
       <App />
       <Analytics />
     </Router>
