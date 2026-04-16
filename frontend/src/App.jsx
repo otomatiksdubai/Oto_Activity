@@ -1,4 +1,6 @@
+/** VERSION: 1.0.1 - Vercel Analytics Corrected **/
 import React, { useState, useEffect } from 'react';
+
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import Login from './pages/Login';
