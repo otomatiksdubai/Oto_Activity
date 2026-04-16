@@ -130,7 +130,7 @@ export default function AppWrapper() {
     <Router>
       <GlobalBackground />
       <App />
-      <Analytics />
+      <Analytics mode={'production'} />
     </Router>
   );
 }
