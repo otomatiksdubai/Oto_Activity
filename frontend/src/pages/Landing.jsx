@@ -285,7 +285,7 @@ export default function Landing() {
 
 
       {/* ── Features ── */}
-      <section className="landing-section reveal" id="about" style={{ paddingTop: '100px' }}>
+      <section className="landing-section reveal" id="about" style={{ paddingTop: '40px' }}>
         <div className="landing-container">
           <span className="section-label">WHAT WE DO</span>
           <h2 className="section-title">At a Glance<span className="dot">.</span></h2>
