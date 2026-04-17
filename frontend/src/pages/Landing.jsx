@@ -468,6 +468,7 @@ export default function Landing() {
           <h2 className="section-title">Our Pricing<span className="dot">.</span></h2>
           <div className="pricing-grid">
             <div className="price-card">
+              <UnderDevelopmentOverlay />
               <h3 className="feature-title">Bootcamp</h3>
               <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
@@ -478,6 +479,7 @@ export default function Landing() {
               <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
             <div className="price-card popular">
+              <UnderDevelopmentOverlay />
               <h3 className="feature-title">Level Wise</h3>
               <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
@@ -488,6 +490,7 @@ export default function Landing() {
               <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
             </div>
             <div className="price-card">
+              <UnderDevelopmentOverlay />
               <h3 className="feature-title">Professional</h3>
               <div className="price-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <DirhamIcon size={46} style={{ marginRight: '6px' }} />
