@@ -285,7 +285,7 @@ export default function Landing() {
 
 
       {/* ── Features ── */}
-      <section className="landing-section reveal" id="about" style={{ paddingTop: '40px' }}>
+      <section className="landing-section reveal" id="about">
         <div className="landing-container">
           <span className="section-label">WHAT WE DO</span>
           <h2 className="section-title">At a Glance<span className="dot">.</span></h2>
@@ -312,8 +312,12 @@ export default function Landing() {
               <p className="muted">Developing 21st-century skills: Coding, Logic, and Engineering.</p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="fun-zone reveal" style={{ marginTop: '60px', textAlign: 'center' }}>
+      <section className="landing-section reveal" id="fun-zone">
+        <div className="landing-container">
+          <div className="fun-zone" style={{ textAlign: 'center' }}>
             <span className="section-label" style={{ color: 'var(--accent-pink)', background: 'linear-gradient(90deg, rgba(255,64,129,0) 0%, rgba(255,64,129,0.15) 25%, rgba(255,64,129,0.15) 75%, rgba(255,64,129,0) 100%)', margin: '0 auto 15px', padding: '6px 0' }}>FUN LEARNING ZONE</span>
             <h2 className="section-title" style={{ fontSize: '32px' }}>Robotics Word Search<span className="dot" style={{ color: 'var(--accent-pink)' }}>.</span></h2>
             <p className="muted" style={{ maxWidth: '600px', marginBottom: '30px', marginLeft: 'auto', marginRight: 'auto' }}>Can you find all the hidden robotics terms? Click the letters to select a word!</p>
