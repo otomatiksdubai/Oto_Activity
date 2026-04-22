@@ -621,7 +621,7 @@ export default function Landing() {
         </svg>
       </a>
 
-      {/* ── 30% Offer Popup ── */}
+      {/* ── 30% Offer Popup ──
       {showOfferPopup && (
         <div className="offer-overlay">
           <div className="offer-modal reveal-visible">
@@ -691,7 +691,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <style dangerouslySetInnerHTML={{
         __html: `
