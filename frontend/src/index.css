@@ -3,13 +3,15 @@
 :root {
   --bg: #ffffff;
   --card: #ffffff;
-  --card2: #f8faff;
-  --text: #1a1a1a;
-  --muted: #666e80;
-  --line: rgba(0, 0, 0, .08);
-  --accent: #1a56b2; /* Deep Blue */
-  --accent2: #f0c419; /* Yellow */
-  --accent-pink: #ff4081; /* Pink */
+  --card2: #f4f9ff;
+  --text: #002d5a; /* Deep Blue for text instead of Grey */
+  --muted: #4a6c8d;
+  --line: rgba(0, 114, 188, .08);
+  --accent: #0072bc; /* Official Primary Blue */
+  --accent-light: #00a9e9; /* Official Light Blue */
+  --accent-gradient: linear-gradient(135deg, #0072ba 0%, #00a9e9 100%);
+  --accent2: #f0c419; /* Yellow kept for contrast */
+  --accent-pink: #ff4081; /* Pink kept for CTAs */
   --danger: #ff5b5b;
   --ok: #3ddc97;
   --gold: #d4af37;
@@ -1303,7 +1305,7 @@ table.invoice th {
 }
 
 .method-section {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: #fff;
   border-radius: 64px;
   padding: 100px 0;
@@ -1435,12 +1437,12 @@ table.invoice th {
 
 /* Footer CTA */
 .cta-banner {
-  background: var(--accent2);
+  background: var(--accent-gradient);
   padding: 100px 40px;
   text-align: center;
   border-radius: 64px;
   margin-top: 40px;
-  box-shadow: 0 24px 64px rgba(240, 196, 25, 0.2);
+  box-shadow: 0 24px 64px rgba(0, 114, 188, 0.2);
   transition: all 0.5s cubic-bezier(0.25, 1, 0.3, 1);
   will-change: transform, box-shadow;
 }
@@ -1453,7 +1455,7 @@ table.invoice th {
 .cta-banner h2 {
   font-size: 56px;
   font-weight: 800;
-  color: #000;
+  color: #ffffff;
   margin-bottom: 40px;
   line-height: 1.1;
 }

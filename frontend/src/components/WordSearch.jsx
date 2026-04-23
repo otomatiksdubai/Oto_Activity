@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 const WORDS = ['ROBOT', 'CODE', 'SENSOR', 'ARDUINO', 'SCRATCH', 'LEGO', 'ENGINEER', 'DRONE', 'CIRCUIT', 'MECHANIC'];
 const GRID_SIZE = 12;
 const SELECTION_COLORS = [
-  '#1a56b2', // Deep Blue
+  '#0072bc', // Official Brand Blue
   '#ff4081', // Pink
   '#28a745', // Green
   '#f0c419', // Gold

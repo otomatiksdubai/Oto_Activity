@@ -490,8 +490,8 @@ export default function Landing() {
                 3500 <span>/ Level</span>
               </div>
               <p className="small muted">2 Sessions per week</p>
-              <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%', background: '#000', color: '#fff' }}>Enroll Now</button>
-              <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: '#000', fontWeight: '700' }}>*T & C Apply</p>
+              <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ marginTop: '30px', width: '100%', background: 'var(--accent)', color: '#fff' }}>Enroll Now</button>
+              <p style={{ position: 'absolute', bottom: '24px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: 'var(--muted)', fontWeight: '700' }}>*T & C Apply</p>
             </div>
             <div className="price-card">
               <UnderDevelopmentOverlay />
@@ -522,10 +522,10 @@ export default function Landing() {
       {/* ── Register CTA ── */}
       <section className="landing-container reveal">
         <div className="cta-banner" style={{ position: 'relative', overflow: 'hidden', maxWidth: '800px', margin: '0 auto' }}>
-          <span className="section-label" style={{ color: '#000' }}>GET IN TOUCH</span>
-          <h2 style={{ fontSize: '48px' }}>Sign Up Now for just <br /><span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}><DirhamIcon size={42} /> 30</span> for a trial lesson<span style={{ color: '#1a56b2' }}>.</span></h2>
-          <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ background: '#000', color: '#fff', marginTop: '20px' }}>Join Otomatiks Today</button>
-          <p style={{ position: 'absolute', bottom: '16px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: 'rgba(0,0,0,0.4)', fontWeight: '700' }}>*T & C Apply</p>
+          <span className="section-label" style={{ color: 'rgba(255,255,255,0.8)' }}>GET IN TOUCH</span>
+          <h2 style={{ fontSize: '48px' }}>Sign Up Now for just <br /><span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}><DirhamIcon size={42} /> 30</span> for a trial lesson<span style={{ color: 'var(--accent2)' }}>.</span></h2>
+          <button className="landing-btn-primary" onClick={() => window.open('https://wa.me/971528834358', '_blank')} style={{ background: 'var(--accent2)', color: '#000', marginTop: '20px' }}>Join Otomatiks Today</button>
+          <p style={{ position: 'absolute', bottom: '16px', left: '0', width: '100%', textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: '700' }}>*T & C Apply</p>
         </div>
       </section>
 
