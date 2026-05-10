@@ -279,6 +279,7 @@ export default function Students() {
         <table>
           <thead>
             <tr>
+              <th>Sl No.</th>
               <th onClick={() => requestSort('name')} style={{cursor: 'pointer'}}>Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th onClick={() => requestSort('grade')} style={{cursor: 'pointer'}}>Grade {sortConfig.key === 'grade' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
               <th onClick={() => requestSort('schoolName')} style={{cursor: 'pointer'}}>School {sortConfig.key === 'schoolName' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
@@ -291,10 +292,11 @@ export default function Students() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="8" style={{ textAlign: 'center' }}>Loading...</td></tr>
+              <tr><td colSpan="9" style={{ textAlign: 'center' }}>Loading...</td></tr>
             ) : (
-              filteredStudents.map((student) => (
+              filteredStudents.map((student, index) => (
                 <tr key={student._id}>
+                  <td>{index + 1}</td>
                   <td>{student.name}</td>
                   <td>{student.grade}</td>
                   <td>{student.schoolName}</td>
