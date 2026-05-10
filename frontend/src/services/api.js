@@ -35,7 +35,7 @@ export const authAPI = {
 
 // Students API
 export const studentAPI = {
-  getAll: () => api.get('/students'),
+  getAll: () => api.get(`/students?_t=${Date.now()}`),
   getById: (id) => api.get(`/students/${id}`),
   create: (data) => api.post('/students', data),
   update: (id, data) => api.put(`/students/${id}`, data),
@@ -45,7 +45,7 @@ export const studentAPI = {
 
 // Staff API
 export const staffAPI = {
-  getAll: () => api.get('/staff'),
+  getAll: () => api.get(`/staff?_t=${Date.now()}`),
   getById: (id) => api.get(`/staff/${id}`),
   create: (data) => api.post('/staff', data),
   update: (id, data) => api.put(`/staff/${id}`, data),
@@ -54,7 +54,7 @@ export const staffAPI = {
 
 // Sessions API
 export const sessionAPI = {
-  getAll: () => api.get('/sessions'),
+  getAll: () => api.get(`/sessions?_t=${Date.now()}`),
   getById: (id) => api.get(`/sessions/${id}`),
   create: (data) => api.post('/sessions', data),
   addStudent: (data) => api.post('/sessions/add-student', data),
@@ -90,7 +90,7 @@ export const reportAPI = {
 
 // Courses API
 export const courseAPI = {
-  getAll: () => api.get('/courses'),
+  getAll: () => api.get(`/courses?_t=${Date.now()}`),
   create: (data) => api.post('/courses', data),
   delete: (id) => api.delete(`/courses/${id}`)
 };
