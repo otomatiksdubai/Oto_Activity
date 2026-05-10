@@ -5,9 +5,14 @@ exports.getAllStudents = async (req, res) => {
   try {
     let query = {};
 
-    // If user is a parent, they only see their own students (matched by username)
+    // If user is a parent, they see all students linked to their contact number
     if (req.role === 'parent') {
-      query = { name: req.username };
+      const loggedInStudent = await Student.findOne({ name: new RegExp(`^${req.username}$`, 'i') });
+      if (loggedInStudent && loggedInStudent.parentPhone) {
+        query = { parentPhone: loggedInStudent.parentPhone };
+      } else {
+        query = { name: new RegExp(`^${req.username}$`, 'i') };
+      }
     }
 
     const students = await Student.find(query).populate('enrolledSessions');
@@ -25,8 +30,11 @@ exports.getStudentById = async (req, res) => {
     }
 
     // Security check for parents
-    if (req.role === 'parent' && student.name !== req.username) {
-      return res.status(403).json({ message: 'Unauthorized' });
+    if (req.role === 'parent') {
+      const loggedInStudent = await Student.findOne({ name: new RegExp(`^${req.username}$`, 'i') });
+      if (!loggedInStudent || loggedInStudent.parentPhone !== student.parentPhone) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
     }
 
     res.json(student);

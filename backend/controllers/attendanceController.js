@@ -6,9 +6,10 @@ exports.getAllAttendance = async (req, res) => {
   try {
     let query = {};
 
-    // If Parent, filter by student(s) matching their username (case-insensitive)
+    // If Parent, filter by student(s) sharing their contact number
     if (req.role === 'parent') {
-      const parentStudents = await Student.find({ name: new RegExp(`^${req.username}$`, 'i') });
+      const loggedInStudent = await Student.findOne({ name: new RegExp(`^${req.username}$`, 'i') });
+      const parentStudents = loggedInStudent ? await Student.find({ parentPhone: loggedInStudent.parentPhone }) : [];
       if (parentStudents.length > 0) {
         query = { student: { $in: parentStudents.map(s => s._id) } };
       } else {
@@ -32,7 +33,8 @@ exports.getAttendanceBySession = async (req, res) => {
 
     // Security check for parent
     if (req.role === 'parent') {
-      const parentStudents = await Student.find({ name: new RegExp(`^${req.username}$`, 'i') });
+      const loggedInStudent = await Student.findOne({ name: new RegExp(`^${req.username}$`, 'i') });
+      const parentStudents = loggedInStudent ? await Student.find({ parentPhone: loggedInStudent.parentPhone }) : [];
       if (parentStudents.length > 0) {
         query.student = { $in: parentStudents.map(s => s._id) };
       } else {
@@ -55,7 +57,8 @@ exports.getAttendanceByStudent = async (req, res) => {
 
     // Security check for parent
     if (req.role === 'parent') {
-      const parentStudents = await Student.find({ name: new RegExp(`^${req.username}$`, 'i') });
+      const loggedInStudent = await Student.findOne({ name: new RegExp(`^${req.username}$`, 'i') });
+      const parentStudents = loggedInStudent ? await Student.find({ parentPhone: loggedInStudent.parentPhone }) : [];
       const parentStudentIds = parentStudents.map(s => s._id.toString());
       if (!parentStudentIds.includes(studentId)) {
         return res.json([]);

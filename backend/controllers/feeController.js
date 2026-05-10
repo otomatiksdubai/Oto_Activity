@@ -5,9 +5,10 @@ exports.getAllFees = async (req, res) => {
   try {
     let query = {};
 
-    // If Parent, filter by student(s) matching their username (case-insensitive)
+    // If Parent, filter by student(s) sharing their contact number
     if (req.role === 'parent') {
-      const parentStudents = await Student.find({ name: new RegExp(`^${req.username}$`, 'i') });
+      const loggedInStudent = await Student.findOne({ name: new RegExp(`^${req.username}$`, 'i') });
+      const parentStudents = loggedInStudent ? await Student.find({ parentPhone: loggedInStudent.parentPhone }) : [];
       const parentStudentIds = parentStudents.map(s => s._id);
       const parentStudentNames = parentStudents.map(s => s.name);
       
