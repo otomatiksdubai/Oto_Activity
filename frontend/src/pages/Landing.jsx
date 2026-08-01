@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -14,6 +15,7 @@ import pythonLogo from '../assets/logo/python.svg';
 
 import { DirhamIcon } from '../components/GlobalAssets';
 import UnderDevelopmentOverlay from '../components/UnderDevelopmentOverlay';
+
 
 
 
@@ -218,6 +220,45 @@ export default function Landing() {
   ];
 
   return (
+  <>
+    <Helmet>
+      <title>Otomatiks Robotics Training Centre Dubai | Robotics & Coding for Kids</title>
+
+      <meta
+        name="description"
+        content="Otomatiks Robotics Training Centre in Dubai offers Robotics, Coding, LEGO, Arduino, Python and AI classes for kids aged 5–17."
+      />
+
+      <meta
+        name="keywords"
+        content="robotics classes Dubai, coding classes Dubai, STEM Dubai, LEGO robotics Dubai, Arduino classes Dubai, Python for kids Dubai"
+      />
+
+      <meta name="author" content="Otomatiks Training Centre" />
+
+      <link
+        rel="canonical"
+        href="https://robotics-me.com/"
+      />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Otomatiks Robotics Training Centre Dubai" />
+      <meta
+        property="og:description"
+        content="Hands-on Robotics, Coding, LEGO, Arduino and AI Classes for Kids in Dubai."
+      />
+      <meta
+        property="og:image"
+        content="https://robotics-me.com/og-image.jpg"
+      />
+      <meta
+        property="og:url"
+        content="https://robotics-me.com/"
+      />
+
+      <meta name="twitter:card" content="summary_large_image" />
+    </Helmet>
+
     <div className="landing-wrapper">
       <nav className={`landing-nav ${menuOpen ? 'menu-is-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
         <div className="landing-container">
@@ -932,6 +973,7 @@ export default function Landing() {
 
 
       `}} />
-    </div>
-  );
+        </div>
+  </>
+);
 }
